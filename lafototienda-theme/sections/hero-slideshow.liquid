@@ -1,0 +1,160 @@
+{%- liquid
+  assign slide_count = section.blocks.size
+-%}
+<section
+  class="hero"
+  data-slideshow
+  data-autoplay="{{ section.settings.autoplay }}"
+  data-speed="{{ section.settings.speed }}"
+  aria-roledescription="carousel"
+  aria-label="{{ section.settings.aria_label | escape }}"
+  style="--hero-height: {{ section.settings.height }}px; --hero-height-mobile: {{ section.settings.height_mobile }}px;"
+>
+  <div class="hero__track" data-slideshow-track>
+    {%- for block in section.blocks -%}
+      {%- liquid
+        assign loading = 'lazy'
+        assign priority = 'auto'
+        if forloop.first
+          assign loading = 'eager'
+          assign priority = 'high'
+        endif
+        assign alt = block.settings.image.alt | default: block.settings.heading | strip_html
+      -%}
+      <div
+        class="hero__slide hero__slide--{{ block.settings.alignment }}{% if forloop.first %} is-active{% endif %}"
+        data-slide
+        role="group"
+        aria-roledescription="slide"
+        aria-label="{{ 'general.slide' | t: number: forloop.index }}"
+        style="--overlay: {{ block.settings.overlay | divided_by: 100.0 }};"
+        {{ block.shopify_attributes }}
+      >
+        <div class="hero__media">
+          {%- if block.settings.image != blank -%}
+            {%- if block.settings.image_mobile != blank -%}
+              <picture>
+                <source
+                  media="(max-width: 749px)"
+                  srcset="{{ block.settings.image_mobile | image_url: width: 750 }} 750w, {{ block.settings.image_mobile | image_url: width: 1100 }} 1100w"
+                  sizes="100vw"
+                >
+                {{
+                  block.settings.image
+                  | image_url: width: 2400
+                  | image_tag: widths: '750, 1100, 1500, 1800, 2400', sizes: '100vw', loading: loading, fetchpriority: priority, alt: alt
+                }}
+              </picture>
+            {%- else -%}
+              {{
+                block.settings.image
+                | image_url: width: 2400
+                | image_tag: widths: '750, 1100, 1500, 1800, 2400', sizes: '100vw', loading: loading, fetchpriority: priority, alt: alt
+              }}
+            {%- endif -%}
+          {%- else -%}
+            {{ 'lifestyle-2' | placeholder_svg_tag: 'placeholder-svg' }}
+          {%- endif -%}
+        </div>
+
+        <div class="hero__content page-width">
+          <div class="hero__inner">
+            {%- if block.settings.eyebrow != blank -%}
+              <span class="hero__eyebrow">{{ block.settings.eyebrow }}</span>
+            {%- endif -%}
+            {%- if block.settings.heading != blank -%}
+              <h2 class="hero__heading">{{ block.settings.heading }}</h2>
+            {%- endif -%}
+            {%- if block.settings.text != blank -%}
+              <div class="hero__text">{{ block.settings.text }}</div>
+            {%- endif -%}
+            {%- if block.settings.button_label != blank or block.settings.button_label_2 != blank -%}
+              <div class="hero__buttons">
+                {%- if block.settings.button_label != blank -%}
+                  <a href="{{ block.settings.button_link | default: routes.all_products_collection_url }}" class="button">{{ block.settings.button_label }}</a>
+                {%- endif -%}
+                {%- if block.settings.button_label_2 != blank -%}
+                  <a href="{{ block.settings.button_link_2 | default: routes.collections_url }}" class="button button--light">{{ block.settings.button_label_2 }}</a>
+                {%- endif -%}
+              </div>
+            {%- endif -%}
+          </div>
+        </div>
+      </div>
+    {%- endfor -%}
+  </div>
+
+  {%- if slide_count > 1 -%}
+    <div class="hero__controls page-width">
+      <button type="button" class="hero__arrow" data-slide-prev aria-label="{{ 'general.previous' | t }}">{% render 'icon', name: 'chevron-left' %}</button>
+      <div class="hero__dots">
+        {%- for block in section.blocks -%}
+          <button type="button" class="hero__dot" data-slide-dot aria-label="{{ 'general.go_to_slide' | t: number: forloop.index }}" aria-current="{% if forloop.first %}true{% else %}false{% endif %}"></button>
+        {%- endfor -%}
+      </div>
+      <button type="button" class="hero__arrow" data-slide-next aria-label="{{ 'general.next' | t }}">{% render 'icon', name: 'chevron-right' %}</button>
+    </div>
+  {%- endif -%}
+</section>
+
+{% schema %}
+{
+  "name": "Banner / Slider",
+  "tag": "div",
+  "class": "section-hero",
+  "max_blocks": 6,
+  "settings": [
+    { "type": "text", "id": "aria_label", "label": "Descripción para lectores de pantalla", "default": "Promociones destacadas" },
+    { "type": "range", "id": "height", "label": "Altura en escritorio", "min": 400, "max": 800, "step": 20, "unit": "px", "default": 600 },
+    { "type": "range", "id": "height_mobile", "label": "Altura en móvil", "min": 340, "max": 700, "step": 20, "unit": "px", "default": 500 },
+    { "type": "checkbox", "id": "autoplay", "label": "Cambiar diapositivas automáticamente", "default": true },
+    { "type": "range", "id": "speed", "label": "Cambiar cada", "min": 3, "max": 12, "step": 1, "unit": "s", "default": 6 }
+  ],
+  "blocks": [
+    {
+      "type": "slide",
+      "name": "Diapositiva",
+      "settings": [
+        { "type": "image_picker", "id": "image", "label": "Imagen", "info": "Recomendado: 2400 x 1200 px." },
+        { "type": "image_picker", "id": "image_mobile", "label": "Imagen para móvil (opcional)", "info": "Recomendado: 900 x 1100 px." },
+        { "type": "range", "id": "overlay", "label": "Oscurecer imagen", "min": 0, "max": 90, "step": 5, "unit": "%", "default": 45 },
+        { "type": "text", "id": "eyebrow", "label": "Etiqueta superior", "default": "Nuevo" },
+        { "type": "inline_richtext", "id": "heading", "label": "Título", "default": "Mundo DJI sin límites" },
+        { "type": "richtext", "id": "text", "label": "Texto", "default": "<p>Drones, gimbals y cámaras de acción DJI con garantía y asesoría experta.</p>" },
+        { "type": "text", "id": "button_label", "label": "Texto del botón", "default": "Comprar ahora" },
+        { "type": "url", "id": "button_link", "label": "Enlace del botón" },
+        { "type": "text", "id": "button_label_2", "label": "Texto del segundo botón" },
+        { "type": "url", "id": "button_link_2", "label": "Enlace del segundo botón" },
+        {
+          "type": "select",
+          "id": "alignment",
+          "label": "Posición del texto",
+          "options": [
+            { "value": "left", "label": "Izquierda" },
+            { "value": "center", "label": "Centro" },
+            { "value": "right", "label": "Derecha" }
+          ],
+          "default": "left"
+        }
+      ]
+    }
+  ],
+  "presets": [
+    {
+      "name": "Banner / Slider",
+      "blocks": [
+        { "type": "slide" },
+        {
+          "type": "slide",
+          "settings": {
+            "eyebrow": "Sony Alpha",
+            "heading": "Captura cada detalle",
+            "text": "<p>Cámaras y lentes Sony con precios especiales este mes.</p>",
+            "button_label": "Ver ofertas"
+          }
+        }
+      ]
+    }
+  ]
+}
+{% endschema %}

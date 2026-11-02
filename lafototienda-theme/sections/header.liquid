@@ -1,0 +1,145 @@
+{%- liquid
+  assign menu = section.settings.menu
+  if menu == blank
+    assign menu = linklists['main-menu']
+  endif
+  assign is_home = false
+  if request.page_type == 'index'
+    assign is_home = true
+  endif
+-%}
+<header class="site-header{% if section.settings.sticky %} site-header--sticky{% endif %}" data-site-header>
+  <div class="page-width">
+    <div class="header">
+      <button type="button" class="header__icon header__menu-toggle" data-drawer-open="MenuDrawer" aria-controls="MenuDrawer" aria-label="{{ 'general.open_menu' | t }}">
+        {% render 'icon', name: 'menu' %}
+      </button>
+
+      <div class="header__logo-wrap">
+        {%- if is_home -%}<h1 class="header__logo">{%- else -%}<div class="header__logo">{%- endif -%}
+          <a href="{{ routes.root_url }}">
+            {%- if settings.logo -%}
+              {%- capture logo_sizes -%}(min-width: 990px) {{ settings.logo_width }}px, {{ settings.logo_width_mobile }}px{%- endcapture -%}
+              {{
+                settings.logo
+                | image_url: width: 600
+                | image_tag:
+                  widths: '150, 200, 300, 400, 600',
+                  sizes: logo_sizes,
+                  alt: shop.name,
+                  loading: 'eager'
+              }}
+              {%- if is_home -%}<span class="visually-hidden">{{ shop.name }}</span>{%- endif -%}
+            {%- else -%}
+              <span class="header__logo-text">{{ section.settings.logo_text_1 }}<span>{{ section.settings.logo_text_2 }}</span></span>
+            {%- endif -%}
+          </a>
+        {%- if is_home -%}</h1>{%- else -%}</div>{%- endif -%}
+      </div>
+
+      <div class="header__search">
+        {% render 'search-form', id: 'HeaderSearch' %}
+      </div>
+
+      <div class="header__icons">
+        <button type="button" class="header__icon header__search-toggle" data-search-toggle aria-controls="MobileSearch" aria-expanded="false" aria-label="{{ 'general.search' | t }}">
+          {% render 'icon', name: 'search' %}
+        </button>
+        {%- if shop.customer_accounts_enabled -%}
+          <a href="{%- if customer -%}{{ routes.account_url }}{%- else -%}{{ routes.account_login_url }}{%- endif -%}" class="header__icon" aria-label="{{ 'general.account' | t }}">
+            {% render 'icon', name: 'account' %}
+          </a>
+        {%- endif -%}
+        <a href="{{ routes.cart_url }}" class="header__icon" data-cart-link aria-label="{{ 'general.cart' | t }}">
+          {% render 'icon', name: 'cart' %}
+          <span class="cart-count" data-cart-count {% if cart.item_count == 0 %}hidden{% endif %}>{{ cart.item_count }}</span>
+        </a>
+      </div>
+    </div>
+
+    <div class="header__search-mobile" id="MobileSearch" hidden>
+      {% render 'search-form', id: 'MobileSearchInput' %}
+    </div>
+  </div>
+
+  {%- if menu.links.size > 0 -%}
+    <nav class="nav-desktop" aria-label="{{ 'general.menu' | t }}">
+      <div class="page-width">
+        <ul class="nav-desktop__list">
+          {%- for link in menu.links -%}
+            <li class="nav-desktop__item">
+              <a href="{{ link.url }}" class="nav-desktop__link"{% if link.current %} aria-current="page"{% endif %}>
+                {{ link.title }}
+                {%- if link.links.size > 0 -%}{% render 'icon', name: 'chevron-down' %}{%- endif -%}
+              </a>
+              {%- if link.links.size > 0 -%}
+                <ul class="nav-dropdown">
+                  {%- for child in link.links -%}
+                    <li><a href="{{ child.url }}"{% if child.current %} aria-current="page"{% endif %}>{{ child.title }}</a></li>
+                  {%- endfor -%}
+                </ul>
+              {%- endif -%}
+            </li>
+          {%- endfor -%}
+        </ul>
+      </div>
+    </nav>
+  {%- endif -%}
+</header>
+
+<div id="MenuDrawer" class="drawer drawer--left" aria-hidden="true" tabindex="-1">
+  <button type="button" class="drawer__overlay" data-drawer-close tabindex="-1" aria-label="{{ 'general.close' | t }}"></button>
+  <div class="drawer__panel" role="dialog" aria-modal="true" aria-label="{{ 'general.menu' | t }}">
+    <div class="drawer__header">
+      <p class="drawer__title h3">{{ 'general.menu' | t }}</p>
+      <button type="button" class="header__icon" data-drawer-close aria-label="{{ 'general.close' | t }}">{% render 'icon', name: 'close' %}</button>
+    </div>
+    <div class="drawer__body">
+      <nav aria-label="{{ 'general.menu' | t }}">
+        <ul class="nav-mobile">
+          {%- for link in menu.links -%}
+            <li>
+              {%- if link.links.size > 0 -%}
+                <details>
+                  <summary>{{ link.title }}{% render 'icon', name: 'chevron-down' %}</summary>
+                  <ul>
+                    <li><a href="{{ link.url }}">{{ 'general.view_all' | t }}</a></li>
+                    {%- for child in link.links -%}
+                      <li><a href="{{ child.url }}">{{ child.title }}</a></li>
+                    {%- endfor -%}
+                  </ul>
+                </details>
+              {%- else -%}
+                <a href="{{ link.url }}"{% if link.current %} aria-current="page"{% endif %}>{{ link.title }}{% render 'icon', name: 'chevron-right' %}</a>
+              {%- endif -%}
+            </li>
+          {%- endfor -%}
+        </ul>
+      </nav>
+      <div class="nav-mobile__extra">
+        {%- if shop.customer_accounts_enabled -%}
+          <a href="{%- if customer -%}{{ routes.account_url }}{%- else -%}{{ routes.account_login_url }}{%- endif -%}" class="button button--secondary button--full">
+            {% render 'icon', name: 'account' %}
+            {%- if customer -%}{{ 'general.account' | t }}{%- else -%}{{ 'general.login' | t }}{%- endif -%}
+          </a>
+        {%- endif -%}
+        {% render 'social-links' %}
+      </div>
+    </div>
+  </div>
+</div>
+
+{% schema %}
+{
+  "name": "Encabezado",
+  "class": "section-header",
+  "enabled_on": { "groups": ["header"] },
+  "settings": [
+    { "type": "link_list", "id": "menu", "label": "Menú principal", "default": "main-menu", "info": "Crea el menú en Tienda online → Navegación con las categorías." },
+    { "type": "checkbox", "id": "sticky", "label": "Fijar encabezado al hacer scroll", "default": true },
+    { "type": "header", "content": "Logo de texto", "info": "Se muestra si no subes un logo en Configuración del tema → Logo." },
+    { "type": "text", "id": "logo_text_1", "label": "Texto principal", "default": "La Foto" },
+    { "type": "text", "id": "logo_text_2", "label": "Texto en color de marca", "default": "Tienda" }
+  ]
+}
+{% endschema %}

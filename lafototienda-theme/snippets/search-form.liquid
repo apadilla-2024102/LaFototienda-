@@ -1,0 +1,7 @@
+{%- comment -%} Formulario de búsqueda. Parámetro: id {%- endcomment -%}
+<form action="{{ routes.search_url }}" method="get" role="search" class="search-form">
+  <label for="{{ id }}" class="visually-hidden">{{ 'general.search' | t }}</label>
+  <input type="search" id="{{ id }}" name="q" value="{{ search.terms | escape }}" placeholder="{{ 'general.search_placeholder' | t }}" autocomplete="off">
+  <input type="hidden" name="options[prefix]" value="last">
+  <button type="submit" aria-label="{{ 'general.search' | t }}">{% render 'icon', name: 'search' %}</button>
+</form>

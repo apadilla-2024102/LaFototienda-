@@ -1,0 +1,234 @@
+{
+  "general": {
+    "skip_to_content": "Saltar al contenido",
+    "home": "Inicio",
+    "menu": "Menú",
+    "open_menu": "Abrir menú",
+    "close": "Cerrar",
+    "search": "Buscar",
+    "search_placeholder": "Buscar cámaras, lentes, drones...",
+    "account": "Mi cuenta",
+    "login": "Iniciar sesión",
+    "cart": "Carrito",
+    "view_all": "Ver todo",
+    "previous": "Anterior",
+    "next": "Siguiente",
+    "slide": "Diapositiva {{ number }}",
+    "go_to_slide": "Ir a la diapositiva {{ number }}",
+    "pause_slideshow": "Pausar presentación",
+    "breadcrumbs": "Ruta de navegación",
+    "share_on": "Síguenos en {{ network }}",
+    "payment_methods": "Métodos de pago",
+    "policies": "Políticas",
+    "all_rights": "Todos los derechos reservados.",
+    "loading": "Cargando..."
+  },
+  "products": {
+    "sale": "Oferta",
+    "sold_out": "Agotado",
+    "unavailable": "No disponible",
+    "buy": "Comprar",
+    "view": "Ver producto",
+    "add_to_cart": "Agregar al carrito",
+    "buy_now": "Comprar ahora",
+    "adding": "Agregando...",
+    "quantity": "Cantidad",
+    "decrease": "Disminuir cantidad",
+    "increase": "Aumentar cantidad",
+    "regular_price": "Precio regular",
+    "sale_price": "Precio de oferta",
+    "from_price": "Desde {{ price }}",
+    "you_save": "Ahorras {{ amount }}",
+    "vendor": "Marca",
+    "sku": "SKU",
+    "in_stock": "Disponible",
+    "low_stock": "¡Últimas {{ count }} unidades!",
+    "description": "Descripción",
+    "warranty": "Garantía",
+    "related": "También te puede interesar",
+    "gallery": "Galería de imágenes",
+    "thumbnail": "Ver imagen {{ number }}",
+    "taxes_included": "Precio con IVA incluido.",
+    "empty_collection": "Esta colección aún no tiene productos.",
+    "pick_collection": "Elige una colección en el editor de temas para mostrar productos."
+  },
+  "collections": {
+    "filters": "Filtros",
+    "filter_and_sort": "Filtrar y ordenar",
+    "sort_by": "Ordenar por",
+    "apply": "Aplicar",
+    "clear": "Limpiar",
+    "clear_all": "Quitar todos",
+    "remove_filter": "Quitar filtro {{ filter }}",
+    "price_from": "Desde",
+    "price_to": "Hasta",
+    "max_price": "El precio más alto es {{ price }}",
+    "products_count": {
+      "one": "{{ count }} producto",
+      "other": "{{ count }} productos"
+    },
+    "no_results": "No hay productos que coincidan con los filtros.",
+    "all_collections": "Categorías"
+  },
+  "cart": {
+    "title": "Tu carrito",
+    "empty": "Tu carrito está vacío.",
+    "continue_shopping": "Seguir comprando",
+    "subtotal": "Subtotal",
+    "checkout": "Finalizar compra",
+    "view_cart": "Ver carrito",
+    "remove": "Eliminar",
+    "remove_item": "Eliminar {{ title }}",
+    "update": "Actualizar carrito",
+    "note": "Nota del pedido",
+    "taxes_and_shipping": "Impuestos y envío se calculan en el checkout.",
+    "free_shipping_remaining": "Te faltan {{ amount }} para obtener envío gratis",
+    "free_shipping_achieved": "¡Tu pedido tiene envío gratis!",
+    "product": "Producto",
+    "price": "Precio",
+    "total": "Total",
+    "discount": "Descuento",
+    "error": "No se pudo agregar el producto. Intenta de nuevo."
+  },
+  "search": {
+    "title": "Buscar",
+    "results_for": "Resultados para “{{ terms }}”",
+    "no_results": "No encontramos resultados para “{{ terms }}”. Prueba con otra palabra.",
+    "results_count": {
+      "one": "{{ count }} resultado",
+      "other": "{{ count }} resultados"
+    }
+  },
+  "blog": {
+    "read_more": "Leer más",
+    "by_author": "Por {{ author }}",
+    "back_to_blog": "Volver a {{ title }}",
+    "tags": "Etiquetas",
+    "comments": {
+      "one": "{{ count }} comentario",
+      "other": "{{ count }} comentarios"
+    },
+    "leave_comment": "Deja un comentario",
+    "post_comment": "Publicar comentario",
+    "comment_moderated": "Tu comentario fue enviado y será publicado después de ser revisado.",
+    "comment_posted": "¡Gracias! Tu comentario fue publicado.",
+    "no_articles": "Aún no hay artículos publicados."
+  },
+  "contact": {
+    "name": "Nombre",
+    "email": "Correo electrónico",
+    "phone": "Teléfono",
+    "store": "Tienda de preferencia",
+    "message": "Mensaje",
+    "send": "Enviar mensaje",
+    "success": "¡Gracias por escribirnos! Te responderemos lo antes posible.",
+    "any_store": "Cualquiera"
+  },
+  "stores": {
+    "address": "Dirección",
+    "phone": "Teléfono",
+    "email": "Correo",
+    "hours": "Horario",
+    "directions": "Cómo llegar"
+  },
+  "not_found": {
+    "title": "Página no encontrada",
+    "text": "La página que buscas no existe o fue movida. Busca un producto o regresa al inicio.",
+    "back_home": "Volver al inicio"
+  },
+  "customer": {
+    "login": {
+      "title": "Iniciar sesión",
+      "email": "Correo electrónico",
+      "password": "Contraseña",
+      "submit": "Ingresar",
+      "forgot": "¿Olvidaste tu contraseña?",
+      "create_account": "Crear cuenta",
+      "guest_title": "Continuar como invitado",
+      "guest_submit": "Continuar"
+    },
+    "recover": {
+      "title": "Restablecer contraseña",
+      "text": "Te enviaremos un correo para restablecer tu contraseña.",
+      "submit": "Enviar",
+      "cancel": "Cancelar",
+      "success": "Te enviamos un correo con un enlace para actualizar tu contraseña."
+    },
+    "register": {
+      "title": "Crear cuenta",
+      "first_name": "Nombre",
+      "last_name": "Apellido",
+      "submit": "Crear cuenta"
+    },
+    "reset": {
+      "title": "Nueva contraseña",
+      "password": "Contraseña",
+      "confirm": "Confirmar contraseña",
+      "submit": "Guardar contraseña"
+    },
+    "activate": {
+      "title": "Activar cuenta",
+      "text": "Crea una contraseña para activar tu cuenta.",
+      "submit": "Activar cuenta",
+      "decline": "Rechazar invitación"
+    },
+    "account": {
+      "title": "Mi cuenta",
+      "logout": "Cerrar sesión",
+      "orders": "Historial de pedidos",
+      "no_orders": "Aún no has realizado pedidos.",
+      "details": "Datos de la cuenta",
+      "view_addresses": "Ver direcciones ({{ count }})",
+      "order": "Pedido",
+      "date": "Fecha",
+      "payment_status": "Estado del pago",
+      "fulfillment_status": "Estado del envío",
+      "total": "Total"
+    },
+    "order": {
+      "title": "Pedido {{ name }}",
+      "date": "Realizado el {{ date }}",
+      "cancelled": "Pedido cancelado el {{ date }}",
+      "product": "Producto",
+      "sku": "SKU",
+      "price": "Precio",
+      "quantity": "Cantidad",
+      "total": "Total",
+      "subtotal": "Subtotal",
+      "shipping": "Envío",
+      "tax": "Impuestos",
+      "discount": "Descuento",
+      "billing_address": "Dirección de facturación",
+      "shipping_address": "Dirección de envío",
+      "back": "Volver a mi cuenta"
+    },
+    "addresses": {
+      "title": "Mis direcciones",
+      "add": "Agregar dirección",
+      "edit": "Editar",
+      "delete": "Eliminar",
+      "delete_confirm": "¿Seguro que deseas eliminar esta dirección?",
+      "default": "Predeterminada",
+      "set_default": "Usar como dirección predeterminada",
+      "first_name": "Nombre",
+      "last_name": "Apellido",
+      "company": "Empresa",
+      "address1": "Dirección",
+      "address2": "Apartamento, oficina, etc.",
+      "city": "Ciudad",
+      "country": "País",
+      "province": "Departamento",
+      "zip": "Código postal",
+      "phone": "Teléfono",
+      "save": "Guardar dirección",
+      "cancel": "Cancelar",
+      "back": "Volver a mi cuenta"
+    }
+  },
+  "pagination": {
+    "label": "Paginación",
+    "page": "Página {{ number }}",
+    "previous": "Página anterior",
+    "next": "Página siguiente"
+  }
+}

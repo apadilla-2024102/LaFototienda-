@@ -1,0 +1,49 @@
+{%- comment -%} Título, descripción, Open Graph y Twitter dinámicos. {%- endcomment -%}
+{%- capture seo_title -%}
+  {{ page_title }}
+  {%- if current_tags %} – {{ current_tags | join: ', ' }}{% endif -%}
+  {%- if current_page != 1 %} – {{ 'pagination.page' | t: number: current_page }}{% endif -%}
+  {%- unless page_title contains shop.name %} | {{ shop.name }}{% endunless -%}
+{%- endcapture -%}
+{%- assign seo_description = page_description | default: shop.description | strip_html | strip_newlines | truncate: 160 -%}
+
+<title>{{ seo_title | strip }}</title>
+{%- if seo_description != blank %}
+  <meta name="description" content="{{ seo_description | escape }}">
+{%- endif %}
+
+{%- liquid
+  assign og_type = 'website'
+  case request.page_type
+    when 'product'
+      assign og_type = 'product'
+    when 'article'
+      assign og_type = 'article'
+  endcase
+  assign og_image = page_image | default: settings.share_image
+-%}
+<meta property="og:site_name" content="{{ shop.name | escape }}">
+<meta property="og:url" content="{{ canonical_url }}">
+<meta property="og:title" content="{{ seo_title | strip | escape }}">
+<meta property="og:type" content="{{ og_type }}">
+<meta property="og:description" content="{{ seo_description | default: shop.name | escape }}">
+<meta property="og:locale" content="es_GT">
+{%- if og_image %}
+  <meta property="og:image" content="https:{{ og_image | image_url: width: 1200 }}">
+  <meta property="og:image:secure_url" content="https:{{ og_image | image_url: width: 1200 }}">
+  <meta property="og:image:width" content="1200">
+  <meta property="og:image:height" content="{{ 1200 | divided_by: og_image.aspect_ratio | round }}">
+  <meta property="og:image:alt" content="{{ og_image.alt | default: page_title | escape }}">
+{%- endif %}
+{%- if request.page_type == 'product' %}
+  <meta property="product:price:amount" content="{{ product.price | money_without_currency | remove: ',' }}">
+  <meta property="product:price:currency" content="{{ cart.currency.iso_code }}">
+  <meta property="product:availability" content="{% if product.available %}in stock{% else %}out of stock{% endif %}">
+{%- endif %}
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:title" content="{{ seo_title | strip | escape }}">
+<meta name="twitter:description" content="{{ seo_description | default: shop.name | escape }}">
+{%- if og_image %}
+  <meta name="twitter:image" content="https:{{ og_image | image_url: width: 1200 }}">
+  <meta name="twitter:image:alt" content="{{ og_image.alt | default: page_title | escape }}">
+{%- endif %}

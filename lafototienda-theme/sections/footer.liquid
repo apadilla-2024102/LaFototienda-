@@ -1,0 +1,121 @@
+<footer class="site-footer">
+  <div class="page-width">
+    <div class="footer__grid">
+      {%- for block in section.blocks -%}
+        <div class="footer__col" {{ block.shopify_attributes }}>
+          {%- case block.type -%}
+            {%- when 'brand' -%}
+              <a href="{{ routes.root_url }}" class="footer__brand">
+                {%- if block.settings.logo -%}
+                  {{ block.settings.logo | image_url: width: 400 | image_tag: loading: 'lazy', alt: shop.name, widths: '200, 300, 400' }}
+                {%- else -%}
+                  {{ shop.name }}
+                {%- endif -%}
+              </a>
+              {%- if block.settings.text != blank -%}
+                <div class="rte">{{ block.settings.text }}</div>
+              {%- endif -%}
+              {%- if block.settings.show_social -%}{% render 'social-links' %}{%- endif -%}
+
+            {%- when 'menu' -%}
+              <h2 class="footer__heading">{{ block.settings.heading }}</h2>
+              {%- assign footer_menu = linklists[block.settings.menu] -%}
+              {%- if footer_menu.links.size > 0 -%}
+                <ul class="footer__links">
+                  {%- for link in footer_menu.links -%}
+                    <li><a href="{{ link.url }}">{{ link.title }}</a></li>
+                  {%- endfor -%}
+                </ul>
+              {%- endif -%}
+
+            {%- when 'policies' -%}
+              <h2 class="footer__heading">{{ block.settings.heading }}</h2>
+              <ul class="footer__links">
+                {%- for policy in shop.policies -%}
+                  <li><a href="{{ policy.url }}">{{ policy.title }}</a></li>
+                {%- endfor -%}
+              </ul>
+
+            {%- when 'text' -%}
+              <h2 class="footer__heading">{{ block.settings.heading }}</h2>
+              <div class="rte">{{ block.settings.text }}</div>
+          {%- endcase -%}
+        </div>
+      {%- endfor -%}
+    </div>
+
+    <div class="footer__bottom">
+      <p>&copy; {{ 'now' | date: '%Y' }} {{ shop.name | link_to: routes.root_url }}. {{ 'general.all_rights' | t }}</p>
+      {%- if section.settings.show_payment_icons and shop.enabled_payment_types.size > 0 -%}
+        <div>
+          <span class="visually-hidden">{{ 'general.payment_methods' | t }}</span>
+          <ul class="payment-icons">
+            {%- for type in shop.enabled_payment_types -%}
+              <li>{{ type | payment_type_svg_tag }}</li>
+            {%- endfor -%}
+          </ul>
+        </div>
+      {%- endif -%}
+    </div>
+  </div>
+</footer>
+
+{% schema %}
+{
+  "name": "Pie de página",
+  "class": "section-footer",
+  "enabled_on": { "groups": ["footer"] },
+  "max_blocks": 5,
+  "settings": [
+    { "type": "checkbox", "id": "show_payment_icons", "label": "Mostrar íconos de métodos de pago", "default": true, "info": "Se muestran automáticamente los métodos activos en Configuración → Pagos." }
+  ],
+  "blocks": [
+    {
+      "type": "brand",
+      "name": "Marca y redes",
+      "limit": 1,
+      "settings": [
+        { "type": "image_picker", "id": "logo", "label": "Logo (versión clara)" },
+        { "type": "richtext", "id": "text", "label": "Texto", "default": "<p>Tu tienda de fotografía, video y drones en Guatemala.</p>" },
+        { "type": "checkbox", "id": "show_social", "label": "Mostrar redes sociales", "default": true, "info": "Configura los enlaces en Configuración del tema → Redes sociales." }
+      ]
+    },
+    {
+      "type": "menu",
+      "name": "Menú",
+      "settings": [
+        { "type": "text", "id": "heading", "label": "Título", "default": "Categorías" },
+        { "type": "link_list", "id": "menu", "label": "Menú", "default": "footer" }
+      ]
+    },
+    {
+      "type": "policies",
+      "name": "Políticas",
+      "limit": 1,
+      "settings": [
+        { "type": "text", "id": "heading", "label": "Título", "default": "Políticas" },
+        { "type": "paragraph", "content": "Muestra automáticamente las políticas creadas en Configuración → Políticas." }
+      ]
+    },
+    {
+      "type": "text",
+      "name": "Texto",
+      "settings": [
+        { "type": "text", "id": "heading", "label": "Título", "default": "Contacto" },
+        { "type": "richtext", "id": "text", "label": "Texto", "default": "<p>Escríbenos y te asesoramos.</p>" }
+      ]
+    }
+  ],
+  "presets": [
+    {
+      "name": "Pie de página",
+      "blocks": [
+        { "type": "brand" },
+        { "type": "menu" },
+        { "type": "policies" },
+        { "type": "text" }
+      ]
+    }
+  ]
+}
+{% endschema %}

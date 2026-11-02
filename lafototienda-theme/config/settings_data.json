@@ -1,0 +1,9 @@
+{
+  "current": "Default",
+  "presets": {
+    "Default": {
+      "cart_type": "drawer",
+      "free_shipping_threshold": 1000
+    }
+  }
+}

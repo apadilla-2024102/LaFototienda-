@@ -1,0 +1,30 @@
+{
+  "type": "footer",
+  "name": "Grupo de pie de página",
+  "sections": {
+    "footer": {
+      "type": "footer",
+      "blocks": {
+        "brand": {
+          "type": "brand",
+          "settings": { "text": "<p>Empresa guatemalteca especialista en fotografía, video y drones. Equipo original, asesoría experta y garantía.</p>", "show_social": true }
+        },
+        "categories": {
+          "type": "menu",
+          "settings": { "heading": "Categorías", "menu": "main-menu" }
+        },
+        "policies": {
+          "type": "policies",
+          "settings": { "heading": "Políticas" }
+        },
+        "contact": {
+          "type": "text",
+          "settings": { "heading": "Nuestras tiendas", "text": "<p><strong>Design Center Zona 10</strong><br>Ciudad de Guatemala</p><p><strong>Plaza Siete</strong><br>Quetzaltenango</p>" }
+        }
+      },
+      "block_order": ["brand", "categories", "policies", "contact"],
+      "settings": { "show_payment_icons": true }
+    }
+  },
+  "order": ["footer"]
+}

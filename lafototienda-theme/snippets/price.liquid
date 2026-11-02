@@ -1,0 +1,39 @@
+{%- comment -%}
+  Precio con precio tachado y ahorro.
+  Parámetros: product (obligatorio), variant (opcional), show_savings (opcional), class (opcional)
+{%- endcomment -%}
+{%- liquid
+  assign target = variant | default: product.selected_or_first_available_variant
+  if variant
+    assign price = target.price
+    assign compare_at = target.compare_at_price
+  else
+    assign price = product.price
+    assign compare_at = product.compare_at_price
+  endif
+  assign on_sale = false
+  if compare_at > price
+    assign on_sale = true
+    assign savings = compare_at | minus: price | money
+  endif
+  assign price_money = price | money
+-%}
+<div class="price{% if on_sale %} price--on-sale{% endif %}{% if class %} {{ class }}{% endif %}">
+  {%- if on_sale -%}
+    <span class="visually-hidden">{{ 'products.sale_price' | t }}</span>
+  {%- endif -%}
+  <span class="price__current">
+    {%- if variant == blank and product.price_varies -%}
+      {{ 'products.from_price' | t: price: price_money }}
+    {%- else -%}
+      {{ price_money }}
+    {%- endif -%}
+  </span>
+  {%- if on_sale -%}
+    <span class="visually-hidden">{{ 'products.regular_price' | t }}</span>
+    <s class="price__compare">{{ compare_at | money }}</s>
+    {%- if show_savings -%}
+      <span class="price__savings">{{ 'products.you_save' | t: amount: savings }}</span>
+    {%- endif -%}
+  {%- endif -%}
+</div>

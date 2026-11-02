@@ -1,0 +1,69 @@
+{
+  "sections": {
+    "hero": {
+      "type": "hero-slideshow",
+      "blocks": {
+        "slide_dji": {
+          "type": "slide",
+          "settings": {
+            "overlay": 45,
+            "eyebrow": "Mundo DJI",
+            "heading": "Mundo DJI sin límites",
+            "text": "<p>Drones, gimbals, micrófonos y cámaras de acción DJI con garantía oficial y asesoría experta.</p>",
+            "button_label": "Comprar ahora",
+            "button_link": "shopify://collections/drones",
+            "button_label_2": "Ver ofertas",
+            "button_link_2": "shopify://collections/ofertas-del-mes",
+            "alignment": "left"
+          }
+        },
+        "slide_sony": {
+          "type": "slide",
+          "settings": {
+            "overlay": 45,
+            "eyebrow": "Sony Alpha",
+            "heading": "Captura cada detalle",
+            "text": "<p>Cámaras mirrorless y lentes G Master con precios especiales este mes.</p>",
+            "button_label": "Ver cámaras",
+            "button_link": "shopify://collections/camaras",
+            "button_label_2": "",
+            "alignment": "left"
+          }
+        }
+      },
+      "block_order": ["slide_dji", "slide_sony"],
+      "settings": {
+        "aria_label": "Promociones destacadas",
+        "height": 600,
+        "height_mobile": 500,
+        "autoplay": true,
+        "speed": 6
+      }
+    },
+    "featured": {
+      "type": "featured-products",
+      "settings": {
+        "eyebrow": "Precios especiales",
+        "heading": "Ofertas del mes",
+        "text": "Aprovecha descuentos por tiempo limitado en equipo seleccionado.",
+        "collection": "ofertas-del-mes",
+        "products_to_show": 3,
+        "show_view_all": true,
+        "background": "default"
+      }
+    },
+    "new_arrivals": {
+      "type": "featured-products",
+      "settings": {
+        "eyebrow": "Recién llegados",
+        "heading": "Nuevos ingresos",
+        "text": "Lo último en cámaras, drones y audio para creadores.",
+        "collection": "nuevos-ingresos",
+        "products_to_show": 3,
+        "show_view_all": true,
+        "background": "surface"
+      }
+    }
+  },
+  "order": ["hero", "featured", "new_arrivals"]
+}
