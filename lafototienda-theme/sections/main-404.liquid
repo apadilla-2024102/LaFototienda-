@@ -1,0 +1,15 @@
+<div class="page-width not-found">
+  <p class="not-found__code" aria-hidden="true">404</p>
+  <h1>{{ 'not_found.title' | t }}</h1>
+  <p>{{ 'not_found.text' | t }}</p>
+  {% render 'search-form', id: 'NotFoundSearch' %}
+  <a href="{{ routes.root_url }}" class="button">{{ 'not_found.back_home' | t }}</a>
+</div>
+
+{% schema %}
+{
+  "name": "Página 404",
+  "tag": "section",
+  "settings": []
+}
+{% endschema %}

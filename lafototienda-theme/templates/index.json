@@ -31,7 +31,10 @@
           }
         }
       },
-      "block_order": ["slide_dji", "slide_sony"],
+      "block_order": [
+        "slide_dji",
+        "slide_sony"
+      ],
       "settings": {
         "aria_label": "Promociones destacadas",
         "height": 600,
@@ -63,7 +66,303 @@
         "show_view_all": true,
         "background": "surface"
       }
+    },
+    "brands": {
+      "type": "brand-logos",
+      "blocks": {
+        "brand_sony": {
+          "type": "brand",
+          "settings": {
+            "name": "Sony",
+            "link": ""
+          }
+        },
+        "brand_canon": {
+          "type": "brand",
+          "settings": {
+            "name": "Canon",
+            "link": ""
+          }
+        },
+        "brand_dji": {
+          "type": "brand",
+          "settings": {
+            "name": "DJI",
+            "link": ""
+          }
+        },
+        "brand_nikon": {
+          "type": "brand",
+          "settings": {
+            "name": "Nikon",
+            "link": ""
+          }
+        },
+        "brand_fujifilm": {
+          "type": "brand",
+          "settings": {
+            "name": "Fujifilm",
+            "link": ""
+          }
+        },
+        "brand_gopro": {
+          "type": "brand",
+          "settings": {
+            "name": "GoPro",
+            "link": ""
+          }
+        },
+        "brand_insta360": {
+          "type": "brand",
+          "settings": {
+            "name": "Insta360",
+            "link": ""
+          }
+        },
+        "brand_godox": {
+          "type": "brand",
+          "settings": {
+            "name": "Godox",
+            "link": ""
+          }
+        }
+      },
+      "block_order": [
+        "brand_sony",
+        "brand_canon",
+        "brand_dji",
+        "brand_nikon",
+        "brand_fujifilm",
+        "brand_gopro",
+        "brand_insta360",
+        "brand_godox"
+      ],
+      "settings": {
+        "heading": "Marcas que distribuimos",
+        "show_heading": true,
+        "background": "default"
+      }
+    },
+    "trust": {
+      "type": "trust-badges",
+      "blocks": {
+        "asesoria": {
+          "type": "badge",
+          "settings": {
+            "icon": "chat",
+            "title": "Asesoría personalizada",
+            "text": "Expertos en fotografía y video te ayudan a elegir."
+          }
+        },
+        "pagos": {
+          "type": "badge",
+          "settings": {
+            "icon": "lock",
+            "title": "Pagos seguros",
+            "text": "Paga con tarjeta de forma 100% segura."
+          }
+        },
+        "envio": {
+          "type": "badge",
+          "settings": {
+            "icon": "truck",
+            "title": "Envío gratis desde Q1,000",
+            "text": "Entregas a toda Guatemala."
+          }
+        },
+        "garantia": {
+          "type": "badge",
+          "settings": {
+            "icon": "shield",
+            "title": "Garantía de 1 año",
+            "text": "Productos originales con garantía."
+          }
+        }
+      },
+      "block_order": [
+        "asesoria",
+        "pagos",
+        "envio",
+        "garantia"
+      ],
+      "settings": {
+        "heading": "Por qué comprar con nosotros",
+        "background": "surface"
+      }
+    },
+    "categories": {
+      "type": "category-grid",
+      "blocks": {
+        "cat_camaras": {
+          "type": "category",
+          "settings": {
+            "collection": "camaras",
+            "title": "Cámaras"
+          }
+        },
+        "cat_lentes": {
+          "type": "category",
+          "settings": {
+            "collection": "lentes",
+            "title": "Lentes"
+          }
+        },
+        "cat_drones": {
+          "type": "category",
+          "settings": {
+            "collection": "drones",
+            "title": "Drones"
+          }
+        },
+        "cat_gimbals": {
+          "type": "category",
+          "settings": {
+            "collection": "gimbals",
+            "title": "Gimbals"
+          }
+        },
+        "cat_accesorios": {
+          "type": "category",
+          "settings": {
+            "collection": "accesorios",
+            "title": "Accesorios"
+          }
+        },
+        "cat_iluminacion": {
+          "type": "category",
+          "settings": {
+            "collection": "iluminacion",
+            "title": "Iluminación"
+          }
+        },
+        "cat_tripodes": {
+          "type": "category",
+          "settings": {
+            "collection": "tripodes",
+            "title": "Trípodes"
+          }
+        }
+      },
+      "block_order": [
+        "cat_camaras",
+        "cat_lentes",
+        "cat_drones",
+        "cat_gimbals",
+        "cat_accesorios",
+        "cat_iluminacion",
+        "cat_tripodes"
+      ],
+      "settings": {
+        "eyebrow": "Explora",
+        "heading": "Compra por categoría",
+        "columns": "4",
+        "feature_first": true,
+        "show_count": true,
+        "show_view_all": true
+      }
+    },
+    "about": {
+      "type": "about",
+      "blocks": {
+        "stat1": {
+          "type": "stat",
+          "settings": {
+            "value": "2",
+            "label": "Tiendas físicas"
+          }
+        },
+        "stat2": {
+          "type": "stat",
+          "settings": {
+            "value": "100%",
+            "label": "Productos originales"
+          }
+        },
+        "stat3": {
+          "type": "stat",
+          "settings": {
+            "value": "1 año",
+            "label": "De garantía"
+          }
+        }
+      },
+      "block_order": [
+        "stat1",
+        "stat2",
+        "stat3"
+      ],
+      "settings": {
+        "eyebrow": "Sobre nosotros",
+        "heading": "Pasión por la imagen desde Guatemala",
+        "text": "<p>Somos una empresa guatemalteca especializada en fotografía, video y drones. Desde nuestras tiendas en Ciudad de Guatemala y Quetzaltenango asesoramos a fotógrafos, creadores de contenido y profesionales para que encuentren el equipo ideal, con productos 100% originales y garantía.</p>",
+        "image_position": "right",
+        "button_label": "Conoce nuestras tiendas",
+        "button_link": "#contacto",
+        "background": "default"
+      }
+    },
+    "stores": {
+      "type": "store-locations",
+      "blocks": {
+        "zona10": {
+          "type": "store",
+          "settings": {
+            "name": "Design Center Zona 10",
+            "city": "Ciudad de Guatemala",
+            "region": "Guatemala",
+            "address": "Design Center, Zona 10\nCiudad de Guatemala",
+            "phone": "+502 0000-0000",
+            "email": "info@lafototienda.gt",
+            "hours": "Lunes a sábado: 10:00 – 19:00\nDomingo: 11:00 – 17:00",
+            "opening_hours": "Mo-Sa 10:00-19:00, Su 11:00-17:00",
+            "maps_url": "https://www.google.com/maps/search/?api=1&query=La+Foto+Tienda+Design+Center+Zona+10+Guatemala"
+          }
+        },
+        "xela": {
+          "type": "store",
+          "settings": {
+            "name": "Plaza Siete Xela",
+            "city": "Quetzaltenango",
+            "region": "Quetzaltenango",
+            "address": "Centro Comercial Plaza Siete\nQuetzaltenango",
+            "phone": "+502 0000-0000",
+            "email": "info@lafototienda.gt",
+            "hours": "Lunes a sábado: 10:00 – 19:00\nDomingo: 11:00 – 17:00",
+            "opening_hours": "Mo-Sa 10:00-19:00, Su 11:00-17:00",
+            "maps_url": "https://www.google.com/maps/search/?api=1&query=La+Foto+Tienda+Plaza+Siete+Quetzaltenango"
+          }
+        }
+      },
+      "block_order": [
+        "zona10",
+        "xela"
+      ],
+      "settings": {
+        "eyebrow": "Visítanos",
+        "heading": "Nuestras tiendas",
+        "text": "Prueba el equipo en persona y recibe asesoría de nuestros expertos."
+      }
+    },
+    "contact": {
+      "type": "contact-form",
+      "settings": {
+        "eyebrow": "Contáctanos",
+        "heading": "¿Necesitas asesoría?",
+        "text": "<p>Escríbenos y uno de nuestros expertos te ayudará a encontrar el equipo ideal para tu proyecto.</p>",
+        "show_store_select": true,
+        "store_names": "Design Center Zona 10\nPlaza Siete Xela"
+      }
     }
   },
-  "order": ["hero", "featured", "new_arrivals"]
+  "order": [
+    "hero",
+    "brands",
+    "trust",
+    "categories",
+    "featured",
+    "new_arrivals",
+    "about",
+    "stores",
+    "contact"
+  ]
 }

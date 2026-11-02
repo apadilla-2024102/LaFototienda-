@@ -591,3 +591,23 @@ p { margin: 0 0 1em; }
 .cart-drawer__content { display: flex; flex-direction: column; flex: 1; min-height: 0; }
 .cart-summary__row--discount { font-size: .9rem; font-weight: 400; }
 .drawer__footer .button + .button, .drawer__footer form + .button { margin-top: .6rem; }
+@media (max-width: 749px) { .categories__grid > li:last-child:nth-child(odd) { grid-column: span 2; } .categories__grid > li:last-child:nth-child(odd) .category-card { aspect-ratio: 2 / 1; } }
+@media (min-width: 990px) {
+  .categories__grid--featured.categories__grid--4 > li:nth-child(6):nth-last-child(2),
+  .categories__grid--featured.categories__grid--4 > li:nth-child(7):last-child { grid-column: span 2; }
+  .categories__grid--featured.categories__grid--4 > li:nth-child(6):nth-last-child(2) .category-card,
+  .categories__grid--featured.categories__grid--4 > li:nth-child(7):last-child .category-card { aspect-ratio: 2 / 1; }
+  .categories__grid:not(.categories__grid--4) { grid-template-columns: repeat(3, 1fr); }
+}
+.cart-note { margin-top: 1.5rem; }
+.payment-icons--center { justify-content: center; margin-top: 1rem; }
+.cart-summary .button + .button { margin-top: .6rem; }
+.account address { font-style: normal; margin-bottom: 1rem; }
+.account aside h2 + address + h2 { margin-top: 1.5rem; }
+.account-box form .button + .button { margin-top: .6rem; }
+.gift-card { text-align: center; }
+.gift-card__logo { width: 180px; margin: 0 auto; }
+.gift-card__code { font-size: 1.25rem; letter-spacing: .08em; }
+.gift-card__qr { display: flex; justify-content: center; margin: 1rem 0; }
+.main-password-logo img, .account-box > img { width: 180px; margin: 0 auto 1.5rem; }
+.address-form .button + .button { margin-left: .5rem; }

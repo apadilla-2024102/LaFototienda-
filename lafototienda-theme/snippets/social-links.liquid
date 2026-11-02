@@ -5,9 +5,10 @@
   {%- for network in networks -%}
     {%- assign key = 'social_' | append: network | append: '_link' -%}
     {%- assign link = settings[key] -%}
+    {%- assign network_name = network | capitalize -%}
     {%- if link != blank -%}
       <li>
-        <a href="{{ link }}" target="_blank" rel="noopener" aria-label="{{ 'general.share_on' | t: network: network | capitalize }}">
+        <a href="{{ link }}" target="_blank" rel="noopener" aria-label="{{ 'general.share_on' | t: network: network_name }}">
           {%- render 'icon', name: network -%}
         </a>
       </li>

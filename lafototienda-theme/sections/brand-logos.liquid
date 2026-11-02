@@ -1,0 +1,76 @@
+<section class="brands{% if section.settings.background == 'surface' %} section--surface{% endif %}" aria-label="{{ section.settings.heading | escape }}">
+  <div class="page-width">
+    {%- if section.settings.show_heading and section.settings.heading != blank -%}
+      <h2 class="visually-hidden">{{ section.settings.heading }}</h2>
+    {%- endif -%}
+    <ul class="brands__list" role="list">
+      {%- for block in section.blocks -%}
+        <li class="brands__item" {{ block.shopify_attributes }}>
+          {%- capture brand_inner -%}
+            {%- if block.settings.image != blank -%}
+              {{
+                block.settings.image
+                | image_url: height: 120
+                | image_tag: loading: 'lazy', alt: block.settings.name | default: block.settings.image.alt, height: 40, widths: '120, 240'
+              }}
+            {%- else -%}
+              <span class="brands__name">{{ block.settings.name }}</span>
+            {%- endif -%}
+          {%- endcapture -%}
+          {%- if block.settings.link != blank -%}
+            <a href="{{ block.settings.link }}" class="brands__link" aria-label="{{ block.settings.name | escape }}">{{ brand_inner }}</a>
+          {%- else -%}
+            <span class="brands__link">{{ brand_inner }}</span>
+          {%- endif -%}
+        </li>
+      {%- endfor -%}
+    </ul>
+  </div>
+</section>
+
+{% schema %}
+{
+  "name": "Logos de marcas",
+  "tag": "div",
+  "class": "section-brands",
+  "max_blocks": 16,
+  "settings": [
+    { "type": "text", "id": "heading", "label": "Título (solo lectores de pantalla)", "default": "Marcas que distribuimos" },
+    { "type": "checkbox", "id": "show_heading", "label": "Incluir título accesible", "default": true },
+    {
+      "type": "select",
+      "id": "background",
+      "label": "Fondo",
+      "options": [
+        { "value": "default", "label": "Blanco" },
+        { "value": "surface", "label": "Gris claro" }
+      ],
+      "default": "default"
+    }
+  ],
+  "blocks": [
+    {
+      "type": "brand",
+      "name": "Marca",
+      "settings": [
+        { "type": "text", "id": "name", "label": "Nombre de la marca", "default": "Marca", "info": "Se muestra como texto si no subes un logo y se usa como texto alternativo." },
+        { "type": "image_picker", "id": "image", "label": "Logo", "info": "PNG o SVG con fondo transparente." },
+        { "type": "url", "id": "link", "label": "Enlace", "info": "Ej. una colección con los productos de la marca." }
+      ]
+    }
+  ],
+  "presets": [
+    {
+      "name": "Logos de marcas",
+      "blocks": [
+        { "type": "brand", "settings": { "name": "Sony" } },
+        { "type": "brand", "settings": { "name": "Canon" } },
+        { "type": "brand", "settings": { "name": "DJI" } },
+        { "type": "brand", "settings": { "name": "Nikon" } },
+        { "type": "brand", "settings": { "name": "Fujifilm" } },
+        { "type": "brand", "settings": { "name": "GoPro" } }
+      ]
+    }
+  ]
+}
+{% endschema %}

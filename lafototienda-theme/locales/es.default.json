@@ -230,5 +230,13 @@
     "page": "Página {{ number }}",
     "previous": "Página anterior",
     "next": "Página siguiente"
+  },
+  "gift_card": {
+    "title": "Tarjeta de regalo de {{ value }}",
+    "expired": "Esta tarjeta de regalo expiró o fue desactivada.",
+    "expires_on": "Válida hasta el {{ expires_on }}",
+    "use_at_checkout": "Usa este código en el checkout para canjear tu tarjeta de regalo.",
+    "add_to_apple_wallet": "Agregar a Apple Wallet",
+    "shop": "Ir a la tienda"
   }
 }

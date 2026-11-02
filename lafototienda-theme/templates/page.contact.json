@@ -1,0 +1,16 @@
+{
+  "sections": {
+    "main": { "type": "main-page", "settings": {} },
+    "contact": {
+      "type": "contact-form",
+      "settings": {
+        "eyebrow": "",
+        "heading": "Escríbenos",
+        "text": "<p>Respondemos en horario de tienda.</p>",
+        "show_store_select": true,
+        "store_names": "Design Center Zona 10\nPlaza Siete Xela"
+      }
+    }
+  },
+  "order": ["main", "contact"]
+}

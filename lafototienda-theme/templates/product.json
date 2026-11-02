@@ -1,0 +1,40 @@
+{
+  "sections": {
+    "main": {
+      "type": "main-product",
+      "blocks": {
+        "vendor": { "type": "vendor", "settings": {} },
+        "title": { "type": "title", "settings": {} },
+        "price": { "type": "price", "settings": {} },
+        "inventory": { "type": "inventory", "settings": {} },
+        "variant_picker": { "type": "variant_picker", "settings": {} },
+        "buy_buttons": { "type": "buy_buttons", "settings": { "show_buy_now": true } },
+        "perks": {
+          "type": "perks",
+          "settings": {
+            "perk_1": "Envío gratis en compras desde Q1,000",
+            "perk_2": "1 año de garantía · Producto original",
+            "perk_3": "Recoge en Zona 10 o en Xela",
+            "perk_4": "Pago 100% seguro con tarjeta"
+          }
+        },
+        "sku": { "type": "sku", "settings": {} },
+        "tabs": {
+          "type": "tabs",
+          "settings": {
+            "specs_label": "Especificaciones",
+            "specs": "",
+            "warranty": "<p>Todos nuestros productos son 100% originales e incluyen <strong>1 año de garantía</strong> contra defectos de fábrica. Para hacer válida la garantía presenta tu factura en cualquiera de nuestras tiendas.</p>"
+          }
+        }
+      },
+      "block_order": ["vendor", "title", "price", "inventory", "variant_picker", "buy_buttons", "perks", "sku", "tabs"],
+      "settings": { "low_stock_threshold": 3 }
+    },
+    "related": {
+      "type": "related-products",
+      "settings": { "heading": "También te puede interesar", "products_to_show": 3 }
+    }
+  },
+  "order": ["main", "related"]
+}

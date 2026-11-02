@@ -1,0 +1,27 @@
+<div class="page-width account">
+  <div class="account-box">
+    <h1>{{ 'customer.activate.title' | t }}</h1>
+    <p>{{ 'customer.activate.text' | t }}</p>
+    {%- form 'activate_customer_password' -%}
+      {%- if form.errors -%}<div class="form-message form-message--error" role="alert">{{ form.errors | default_errors }}</div>{%- endif -%}
+      <div class="field">
+        <label for="ActivatePassword">{{ 'customer.reset.password' | t }}</label>
+        <input type="password" name="customer[password]" id="ActivatePassword" autocomplete="new-password" required>
+      </div>
+      <div class="field">
+        <label for="ActivatePasswordConfirm">{{ 'customer.reset.confirm' | t }}</label>
+        <input type="password" name="customer[password_confirmation]" id="ActivatePasswordConfirm" autocomplete="new-password" required>
+      </div>
+      <button type="submit" class="button button--full">{{ 'customer.activate.submit' | t }}</button>
+      <button type="submit" name="decline" class="button button--secondary button--full">{{ 'customer.activate.decline' | t }}</button>
+    {%- endform -%}
+  </div>
+</div>
+
+{% schema %}
+{
+  "name": "Activar cuenta",
+  "tag": "section",
+  "settings": []
+}
+{% endschema %}

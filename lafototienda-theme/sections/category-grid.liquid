@@ -1,0 +1,106 @@
+<section class="section" aria-labelledby="Heading-{{ section.id }}">
+  <div class="page-width">
+    <div class="section-header" data-reveal>
+      <div>
+        {%- if section.settings.eyebrow != blank -%}
+          <span class="section-header__eyebrow">{{ section.settings.eyebrow }}</span>
+        {%- endif -%}
+        <h2 id="Heading-{{ section.id }}">{{ section.settings.heading }}</h2>
+      </div>
+      {%- if section.settings.show_view_all -%}
+        <a href="{{ routes.collections_url }}" class="link">{{ 'general.view_all' | t }}{% render 'icon', name: 'chevron-right' %}</a>
+      {%- endif -%}
+    </div>
+
+    <ul class="categories__grid categories__grid--{{ section.settings.columns }}{% if section.settings.feature_first %} categories__grid--featured{% endif %}" role="list">
+      {%- for block in section.blocks -%}
+        {%- liquid
+          assign cat = block.settings.collection
+          assign cat_image = block.settings.image | default: cat.featured_image
+          assign cat_title = block.settings.title | default: cat.title
+          assign cat_url = cat.url | default: routes.collections_url
+          assign img_sizes = '(min-width: 990px) 25vw, (min-width: 750px) 33vw, 50vw'
+          if forloop.first and section.settings.feature_first
+            assign img_sizes = '(min-width: 990px) 50vw, (min-width: 750px) 33vw, 50vw'
+          endif
+        -%}
+        <li data-reveal {{ block.shopify_attributes }}>
+          <a href="{{ cat_url }}" class="category-card">
+            <div class="category-card__media">
+              {%- if cat_image -%}
+                {{
+                  cat_image
+                  | image_url: width: 1200
+                  | image_tag: widths: '300, 450, 600, 800, 1200', sizes: img_sizes, loading: 'lazy', alt: cat_image.alt | default: cat_title
+                }}
+              {%- else -%}
+                {%- assign placeholder_index = forloop.index | modulo: 4 | plus: 1 -%}
+                {{ 'collection-' | append: placeholder_index | placeholder_svg_tag: 'placeholder-svg' }}
+              {%- endif -%}
+            </div>
+            <div class="category-card__body">
+              <h3 class="category-card__title">
+                {{ cat_title | default: 'Categoría' }}
+                {%- if section.settings.show_count and cat.products_count > 0 -%}
+                  <span class="category-card__count">{{ 'collections.products_count' | t: count: cat.products_count }}</span>
+                {%- endif -%}
+              </h3>
+              <span class="category-card__arrow">{% render 'icon', name: 'chevron-right' %}</span>
+            </div>
+          </a>
+        </li>
+      {%- endfor -%}
+    </ul>
+  </div>
+</section>
+
+{% schema %}
+{
+  "name": "Mosaico de categorías",
+  "tag": "div",
+  "class": "section-categories",
+  "max_blocks": 12,
+  "settings": [
+    { "type": "text", "id": "eyebrow", "label": "Etiqueta superior", "default": "Explora" },
+    { "type": "text", "id": "heading", "label": "Título", "default": "Compra por categoría" },
+    {
+      "type": "select",
+      "id": "columns",
+      "label": "Columnas en escritorio",
+      "options": [
+        { "value": "3", "label": "3" },
+        { "value": "4", "label": "4" }
+      ],
+      "default": "4"
+    },
+    { "type": "checkbox", "id": "feature_first", "label": "Destacar la primera categoría (más grande)", "default": true },
+    { "type": "checkbox", "id": "show_count", "label": "Mostrar cantidad de productos", "default": true },
+    { "type": "checkbox", "id": "show_view_all", "label": "Mostrar enlace “Ver todo”", "default": true }
+  ],
+  "blocks": [
+    {
+      "type": "category",
+      "name": "Categoría",
+      "settings": [
+        { "type": "collection", "id": "collection", "label": "Colección" },
+        { "type": "text", "id": "title", "label": "Título (opcional)", "info": "Por defecto se usa el nombre de la colección." },
+        { "type": "image_picker", "id": "image", "label": "Imagen (opcional)", "info": "Por defecto se usa la imagen de la colección." }
+      ]
+    }
+  ],
+  "presets": [
+    {
+      "name": "Mosaico de categorías",
+      "blocks": [
+        { "type": "category", "settings": { "title": "Cámaras" } },
+        { "type": "category", "settings": { "title": "Lentes" } },
+        { "type": "category", "settings": { "title": "Drones" } },
+        { "type": "category", "settings": { "title": "Gimbals" } },
+        { "type": "category", "settings": { "title": "Accesorios" } },
+        { "type": "category", "settings": { "title": "Iluminación" } },
+        { "type": "category", "settings": { "title": "Trípodes" } }
+      ]
+    }
+  ]
+}
+{% endschema %}

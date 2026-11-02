@@ -1,0 +1,10 @@
+{
+  "sections": {
+    "main": { "type": "main-404", "settings": {} },
+    "featured": {
+      "type": "featured-products",
+      "settings": { "eyebrow": "", "heading": "Ofertas del mes", "text": "", "collection": "ofertas-del-mes", "products_to_show": 3, "show_view_all": true, "background": "surface" }
+    }
+  },
+  "order": ["main", "featured"]
+}

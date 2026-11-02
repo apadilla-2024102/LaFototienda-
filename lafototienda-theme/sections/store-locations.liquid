@@ -1,0 +1,131 @@
+<section class="section section--surface" aria-labelledby="Heading-{{ section.id }}">
+  <div class="page-width">
+    <div class="section-header section-header--center" data-reveal>
+      {%- if section.settings.eyebrow != blank -%}
+        <span class="section-header__eyebrow">{{ section.settings.eyebrow }}</span>
+      {%- endif -%}
+      <h2 id="Heading-{{ section.id }}">{{ section.settings.heading }}</h2>
+      {%- if section.settings.text != blank -%}
+        <p class="section-header__text">{{ section.settings.text }}</p>
+      {%- endif -%}
+    </div>
+
+    <ul class="stores__grid" role="list">
+      {%- for block in section.blocks -%}
+        {%- assign s = block.settings -%}
+        <li data-reveal {{ block.shopify_attributes }}>
+          <article class="store-card">
+            {%- if s.image != blank -%}
+              <div class="store-card__media">
+                {{ s.image | image_url: width: 1200 | image_tag: widths: '400, 600, 900, 1200', sizes: '(min-width: 750px) 50vw, 100vw', loading: 'lazy', alt: s.image.alt | default: s.name }}
+              </div>
+            {%- endif -%}
+            <div class="store-card__body">
+              <p class="store-card__city">{{ s.city }}</p>
+              <h3 class="store-card__name h2">{{ s.name }}</h3>
+              <ul class="store-card__list" role="list">
+                {%- if s.address != blank -%}
+                  <li>{% render 'icon', name: 'map-pin' %}<span><span class="visually-hidden">{{ 'stores.address' | t }}: </span>{{ s.address }}</span></li>
+                {%- endif -%}
+                {%- if s.phone != blank -%}
+                  <li>{% render 'icon', name: 'phone' %}<span><span class="visually-hidden">{{ 'stores.phone' | t }}: </span><a href="tel:{{ s.phone | remove: ' ' | remove: '-' }}">{{ s.phone }}</a></span></li>
+                {%- endif -%}
+                {%- if s.email != blank -%}
+                  <li>{% render 'icon', name: 'mail' %}<span><span class="visually-hidden">{{ 'stores.email' | t }}: </span><a href="mailto:{{ s.email }}">{{ s.email }}</a></span></li>
+                {%- endif -%}
+                {%- if s.hours != blank -%}
+                  <li>{% render 'icon', name: 'clock' %}<span><span class="visually-hidden">{{ 'stores.hours' | t }}: </span>{{ s.hours }}</span></li>
+                {%- endif -%}
+              </ul>
+              {%- if s.maps_url != blank -%}
+                <div class="store-card__actions">
+                  <a href="{{ s.maps_url }}" class="button" target="_blank" rel="noopener">
+                    {% render 'icon', name: 'map-pin' %}{{ 'stores.directions' | t }}
+                  </a>
+                </div>
+              {%- endif -%}
+            </div>
+          </article>
+        </li>
+      {%- endfor -%}
+    </ul>
+  </div>
+</section>
+
+{%- comment -%} Datos estructurados LocalBusiness de cada tienda {%- endcomment -%}
+{%- for block in section.blocks -%}
+  {%- assign s = block.settings -%}
+  <script type="application/ld+json">
+    {
+      "@context": "https://schema.org",
+      "@type": "LocalBusiness",
+      "@id": {{ shop.url | append: '/#tienda-' | append: block.id | json }},
+      "name": {{ shop.name | append: ' – ' | append: s.name | json }},
+      "parentOrganization": { "@id": {{ shop.url | append: '/#organization' | json }} },
+      "url": {{ shop.url | json }},
+      {%- if s.image != blank -%}"image": {{ s.image | image_url: width: 1200 | prepend: 'https:' | json }},{%- elsif settings.logo -%}"image": {{ settings.logo | image_url: width: 600 | prepend: 'https:' | json }},{%- endif -%}
+      {%- if s.phone != blank -%}"telephone": {{ s.phone | json }},{%- endif -%}
+      {%- if s.email != blank -%}"email": {{ s.email | json }},{%- endif -%}
+      {%- if s.opening_hours != blank -%}"openingHours": {{ s.opening_hours | split: ',' | json }},{%- endif -%}
+      {%- if s.maps_url != blank -%}"hasMap": {{ s.maps_url | json }},{%- endif -%}
+      "priceRange": "Q-QQQ",
+      "currenciesAccepted": {{ cart.currency.iso_code | json }},
+      "address": {
+        "@type": "PostalAddress",
+        "streetAddress": {{ s.address | strip_newlines | json }},
+        "addressLocality": {{ s.city | json }},
+        "addressRegion": {{ s.region | json }},
+        "addressCountry": "GT"
+      }
+    }
+  </script>
+{%- endfor -%}
+
+{% schema %}
+{
+  "name": "Nuestras tiendas",
+  "tag": "div",
+  "class": "section-stores",
+  "max_blocks": 4,
+  "settings": [
+    { "type": "text", "id": "eyebrow", "label": "Etiqueta superior", "default": "Visítanos" },
+    { "type": "text", "id": "heading", "label": "Título", "default": "Nuestras tiendas" },
+    { "type": "text", "id": "text", "label": "Descripción", "default": "Prueba el equipo en persona y recibe asesoría de nuestros expertos." }
+  ],
+  "blocks": [
+    {
+      "type": "store",
+      "name": "Tienda",
+      "settings": [
+        { "type": "text", "id": "name", "label": "Nombre", "default": "Design Center Zona 10" },
+        { "type": "text", "id": "city", "label": "Ciudad", "default": "Ciudad de Guatemala" },
+        { "type": "text", "id": "region", "label": "Departamento", "default": "Guatemala" },
+        { "type": "textarea", "id": "address", "label": "Dirección", "default": "Design Center, Zona 10, Ciudad de Guatemala" },
+        { "type": "text", "id": "phone", "label": "Teléfono" },
+        { "type": "text", "id": "email", "label": "Correo" },
+        { "type": "textarea", "id": "hours", "label": "Horario (visible)", "default": "Lunes a sábado: 10:00 – 19:00\nDomingo: 11:00 – 17:00" },
+        { "type": "text", "id": "opening_hours", "label": "Horario para Google (formato técnico)", "default": "Mo-Sa 10:00-19:00, Su 11:00-17:00", "info": "Separa con comas. Días: Mo Tu We Th Fr Sa Su." },
+        { "type": "url", "id": "maps_url", "label": "Enlace de Google Maps" },
+        { "type": "image_picker", "id": "image", "label": "Foto de la tienda" }
+      ]
+    }
+  ],
+  "presets": [
+    {
+      "name": "Nuestras tiendas",
+      "blocks": [
+        { "type": "store" },
+        {
+          "type": "store",
+          "settings": {
+            "name": "Plaza Siete Xela",
+            "city": "Quetzaltenango",
+            "region": "Quetzaltenango",
+            "address": "Centro Comercial Plaza Siete, Quetzaltenango"
+          }
+        }
+      ]
+    }
+  ]
+}
+{% endschema %}
