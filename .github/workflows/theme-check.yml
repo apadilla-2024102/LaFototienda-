@@ -6,8 +6,10 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
-      - name: Theme Check
-        uses: shopify/theme-check-action@v2
+      - uses: actions/setup-node@v4
         with:
-          theme_root: lafototienda-theme
-          token: ${{ github.token }}
+          node-version: 22
+      - name: Instalar Shopify CLI
+        run: npm install -g @shopify/cli
+      - name: Theme Check
+        run: shopify theme check --path lafototienda-theme --fail-level error
