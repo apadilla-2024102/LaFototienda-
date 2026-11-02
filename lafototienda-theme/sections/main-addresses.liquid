@@ -1,0 +1,72 @@
+<div class="page-width page-width--narrow account">
+  <p><a href="{{ routes.account_url }}" class="link">{% render 'icon', name: 'chevron-left' %}{{ 'customer.addresses.back' | t }}</a></p>
+  <h1>{{ 'customer.addresses.title' | t }}</h1>
+
+  <button type="button" class="button" data-address-toggle aria-controls="AddressNew" aria-expanded="false">{% render 'icon', name: 'plus' %}{{ 'customer.addresses.add' | t }}</button>
+  <div class="address-form" id="AddressNew" hidden>
+    {%- form 'customer_address', customer.new_address -%}
+      {% render 'address-form', form: form, prefix: 'AddressNew' %}
+      <button type="submit" class="button">{{ 'customer.addresses.save' | t }}</button>
+      <button type="button" class="button button--secondary" data-address-toggle aria-controls="AddressNew">{{ 'customer.addresses.cancel' | t }}</button>
+    {%- endform -%}
+  </div>
+
+  {%- paginate customer.addresses by 10 -%}
+    <div class="addresses-list">
+      {%- for address in customer.addresses -%}
+        <div class="address-card">
+          {%- if address == customer.default_address -%}<span class="badge badge--discount">{{ 'customer.addresses.default' | t }}</span>{%- endif -%}
+          <address>{{ address | format_address }}</address>
+          <div class="address-card__actions">
+            <button type="button" class="button button--secondary button--small" data-address-toggle aria-controls="AddressEdit-{{ address.id }}" aria-expanded="false">{{ 'customer.addresses.edit' | t }}</button>
+            <form method="post" action="{{ address.url }}" data-address-delete data-confirm="{{ 'customer.addresses.delete_confirm' | t | escape }}">
+              <input type="hidden" name="_method" value="delete">
+              <button type="submit" class="button button--secondary button--small">{{ 'customer.addresses.delete' | t }}</button>
+            </form>
+          </div>
+          <div class="address-form" id="AddressEdit-{{ address.id }}" hidden>
+            {%- form 'customer_address', address -%}
+              {%- assign edit_prefix = 'AddressEdit' | append: address.id -%}
+              {% render 'address-form', form: form, prefix: edit_prefix %}
+              <button type="submit" class="button">{{ 'customer.addresses.save' | t }}</button>
+              <button type="button" class="button button--secondary" data-address-toggle aria-controls="AddressEdit-{{ address.id }}">{{ 'customer.addresses.cancel' | t }}</button>
+            {%- endform -%}
+          </div>
+        </div>
+      {%- endfor -%}
+    </div>
+    {% render 'pagination', paginate: paginate %}
+  {%- endpaginate -%}
+</div>
+
+<script src="{{ 'shopify_common.js' | shopify_asset_url }}" defer></script>
+<script>
+  document.addEventListener('DOMContentLoaded', function () {
+    document.querySelectorAll('[data-country-select]').forEach(function (select) {
+      if (window.Shopify && Shopify.CountryProvinceSelector) {
+        new Shopify.CountryProvinceSelector(select.id, select.dataset.provinceId, { hideElement: select.dataset.provinceId });
+      }
+    });
+    document.querySelectorAll('[data-address-toggle]').forEach(function (btn) {
+      btn.addEventListener('click', function () {
+        var panel = document.getElementById(btn.getAttribute('aria-controls'));
+        var open = panel.hasAttribute('hidden');
+        panel.toggleAttribute('hidden', !open);
+        btn.setAttribute('aria-expanded', String(open));
+      });
+    });
+    document.querySelectorAll('[data-address-delete]').forEach(function (form) {
+      form.addEventListener('submit', function (e) {
+        if (!window.confirm(form.dataset.confirm)) e.preventDefault();
+      });
+    });
+  });
+</script>
+
+{% schema %}
+{
+  "name": "Direcciones",
+  "tag": "section",
+  "settings": []
+}
+{% endschema %}

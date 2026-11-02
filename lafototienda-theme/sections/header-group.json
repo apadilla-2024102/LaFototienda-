@@ -1,0 +1,26 @@
+{
+  "type": "header",
+  "name": "Grupo de encabezado",
+  "sections": {
+    "announcement": {
+      "type": "announcement-bar",
+      "blocks": {
+        "hours_zona10": {
+          "type": "message",
+          "settings": { "text": "<strong>Design Center Zona 10:</strong> Lun a Sáb 10:00 – 19:00 · Dom 11:00 – 17:00", "link": "", "icon": "clock" }
+        },
+        "hours_xela": {
+          "type": "message",
+          "settings": { "text": "<strong>Plaza Siete Xela:</strong> Lun a Sáb 10:00 – 19:00 · Dom 11:00 – 17:00", "link": "", "icon": "map-pin" }
+        }
+      },
+      "block_order": ["hours_zona10", "hours_xela"],
+      "settings": { "aria_label": "Horarios de nuestras tiendas" }
+    },
+    "header": {
+      "type": "header",
+      "settings": { "menu": "main-menu", "sticky": true, "logo_text_1": "La Foto", "logo_text_2": "Tienda" }
+    }
+  },
+  "order": ["announcement", "header"]
+}

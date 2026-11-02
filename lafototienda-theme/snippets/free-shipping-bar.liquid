@@ -1,0 +1,23 @@
+{%- liquid
+  assign threshold = settings.free_shipping_threshold | times: 100
+-%}
+{%- if threshold > 0 and cart.item_count > 0 -%}
+  {%- liquid
+    assign remaining = threshold | minus: cart.total_price
+    assign progress = cart.total_price | times: 100 | divided_by: threshold
+    if progress > 100
+      assign progress = 100
+    endif
+    assign remaining_money = remaining | money
+  -%}
+  <div class="free-shipping">
+    {%- if remaining > 0 -%}
+      <p>{{ 'cart.free_shipping_remaining' | t: amount: remaining_money }}</p>
+    {%- else -%}
+      <p><strong>{{ 'cart.free_shipping_achieved' | t }}</strong></p>
+    {%- endif -%}
+    <div class="free-shipping__bar" role="progressbar" aria-valuemin="0" aria-valuemax="100" aria-valuenow="{{ progress }}">
+      <span style="width: {{ progress }}%"></span>
+    </div>
+  </div>
+{%- endif -%}

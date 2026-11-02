@@ -1,0 +1,28 @@
+{%- liquid
+  assign has_active = false
+  for filter in results.filters
+    if filter.active_values.size > 0 or filter.min_value.value or filter.max_value.value
+      assign has_active = true
+    endif
+  endfor
+-%}
+{%- if has_active -%}
+  <ul class="active-filters" role="list">
+    {%- for filter in results.filters -%}
+      {%- for value in filter.active_values -%}
+        <li>
+          <a href="{{ value.url_to_remove }}" aria-label="{{ 'collections.remove_filter' | t: filter: value.label | escape }}">{{ filter.label }}: {{ value.label }}{% render 'icon', name: 'close' %}</a>
+        </li>
+      {%- endfor -%}
+      {%- if filter.type == 'price_range' -%}
+        {%- if filter.min_value.value or filter.max_value.value -%}
+          <li>
+            <a href="{{ filter.url_to_remove }}">
+              {{ filter.min_value.value | default: 0 | money }} – {{ filter.max_value.value | default: filter.range_max | money }}{% render 'icon', name: 'close' %}
+            </a>
+          </li>
+        {%- endif -%}
+      {%- endif -%}
+    {%- endfor -%}
+  </ul>
+{%- endif -%}

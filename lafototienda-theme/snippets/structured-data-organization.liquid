@@ -1,0 +1,60 @@
+{%- comment -%}
+  JSON-LD de la organización (todas las páginas) y WebSite con buscador (solo inicio).
+  Las dos tiendas físicas (LocalBusiness) se generan en la sección "Nuestras tiendas".
+{%- endcomment -%}
+{%- liquid
+  assign same_as = ''
+  if settings.social_facebook_link != blank
+    assign same_as = same_as | append: settings.social_facebook_link | append: '|'
+  endif
+  if settings.social_instagram_link != blank
+    assign same_as = same_as | append: settings.social_instagram_link | append: '|'
+  endif
+  if settings.social_tiktok_link != blank
+    assign same_as = same_as | append: settings.social_tiktok_link | append: '|'
+  endif
+  if settings.social_youtube_link != blank
+    assign same_as = same_as | append: settings.social_youtube_link | append: '|'
+  endif
+  assign same_as = same_as | split: '|'
+-%}
+<script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@type": "Organization",
+    "@id": {{ shop.url | append: '/#organization' | json }},
+    "name": {{ shop.name | json }},
+    "url": {{ shop.url | json }}
+    {%- if settings.logo -%},
+      "logo": {{ settings.logo | image_url: width: 600 | prepend: 'https:' | json }}
+    {%- endif -%}
+    {%- if same_as.size > 0 -%},
+      "sameAs": {{ same_as | json }}
+    {%- endif -%}
+    {%- if settings.org_phone != blank or settings.org_email != blank -%},
+      "contactPoint": {
+        "@type": "ContactPoint",
+        "contactType": "customer service",
+        "areaServed": "GT",
+        "availableLanguage": "es"
+        {%- if settings.org_phone != blank -%}, "telephone": {{ settings.org_phone | json }}{%- endif -%}
+        {%- if settings.org_email != blank -%}, "email": {{ settings.org_email | json }}{%- endif -%}
+      }
+    {%- endif %}
+  }
+</script>
+{%- if request.page_type == 'index' %}
+  <script type="application/ld+json">
+    {
+      "@context": "https://schema.org",
+      "@type": "WebSite",
+      "name": {{ shop.name | json }},
+      "url": {{ shop.url | json }},
+      "potentialAction": {
+        "@type": "SearchAction",
+        "target": {{ shop.url | append: routes.search_url | append: '?q={search_term_string}' | json }},
+        "query-input": "required name=search_term_string"
+      }
+    }
+  </script>
+{%- endif -%}

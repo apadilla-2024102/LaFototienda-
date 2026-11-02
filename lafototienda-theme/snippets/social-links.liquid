@@ -1,0 +1,24 @@
+{%- liquid
+  assign networks = 'facebook,instagram,tiktok,youtube' | split: ','
+-%}
+<ul class="social-links">
+  {%- for network in networks -%}
+    {%- assign key = 'social_' | append: network | append: '_link' -%}
+    {%- assign link = settings[key] -%}
+    {%- assign network_name = network | capitalize -%}
+    {%- if link != blank -%}
+      <li>
+        <a href="{{ link }}" target="_blank" rel="noopener" aria-label="{{ 'general.share_on' | t: network: network_name }}">
+          {%- render 'icon', name: network -%}
+        </a>
+      </li>
+    {%- endif -%}
+  {%- endfor -%}
+  {%- if settings.social_whatsapp_number != blank -%}
+    <li>
+      <a href="https://wa.me/{{ settings.social_whatsapp_number | remove: '+' | remove: ' ' | remove: '-' }}" target="_blank" rel="noopener" aria-label="{{ 'general.share_on' | t: network: 'WhatsApp' }}">
+        {%- render 'icon', name: 'whatsapp' -%}
+      </a>
+    </li>
+  {%- endif -%}
+</ul>

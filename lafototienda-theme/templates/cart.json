@@ -1,0 +1,10 @@
+{
+  "sections": {
+    "main": { "type": "main-cart", "settings": { "show_note": true } },
+    "featured": {
+      "type": "featured-products",
+      "settings": { "eyebrow": "", "heading": "Nuevos ingresos", "text": "", "collection": "nuevos-ingresos", "products_to_show": 3, "show_view_all": true, "background": "surface" }
+    }
+  },
+  "order": ["main", "featured"]
+}

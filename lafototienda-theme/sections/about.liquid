@@ -1,0 +1,101 @@
+<section class="section{% if section.settings.background == 'surface' %} section--surface{% endif %}" aria-labelledby="Heading-{{ section.id }}">
+  <div class="page-width">
+    <div class="about{% if section.settings.image_position == 'left' %} about--image-left{% endif %}">
+      <div data-reveal>
+        {%- if section.settings.eyebrow != blank -%}
+          <span class="section-header__eyebrow">{{ section.settings.eyebrow }}</span>
+        {%- endif -%}
+        <h2 id="Heading-{{ section.id }}">{{ section.settings.heading }}</h2>
+        <div class="about__text rte">{{ section.settings.text }}</div>
+
+        {%- if section.blocks.size > 0 -%}
+          <ul class="about__stats" role="list">
+            {%- for block in section.blocks -%}
+              <li class="about__stat" {{ block.shopify_attributes }}>
+                <strong>{{ block.settings.value }}</strong>
+                <span>{{ block.settings.label }}</span>
+              </li>
+            {%- endfor -%}
+          </ul>
+        {%- endif -%}
+
+        {%- if section.settings.button_label != blank -%}
+          <a href="{{ section.settings.button_link | default: routes.root_url }}" class="button button--secondary">{{ section.settings.button_label }}</a>
+        {%- endif -%}
+      </div>
+      <div class="about__media" data-reveal>
+        {%- if section.settings.image != blank -%}
+          {{
+            section.settings.image
+            | image_url: width: 1400
+            | image_tag: widths: '450, 700, 1000, 1400', sizes: '(min-width: 990px) 50vw, 100vw', loading: 'lazy', alt: section.settings.image.alt | default: section.settings.heading
+          }}
+        {%- else -%}
+          {{ 'lifestyle-1' | placeholder_svg_tag: 'placeholder-svg' }}
+        {%- endif -%}
+      </div>
+    </div>
+  </div>
+</section>
+
+{% schema %}
+{
+  "name": "Sobre nosotros",
+  "tag": "div",
+  "class": "section-about",
+  "max_blocks": 3,
+  "settings": [
+    { "type": "text", "id": "eyebrow", "label": "Etiqueta superior", "default": "Sobre nosotros" },
+    { "type": "text", "id": "heading", "label": "Título", "default": "Pasión por la imagen desde Guatemala" },
+    {
+      "type": "richtext",
+      "id": "text",
+      "label": "Texto",
+      "default": "<p>Somos una empresa guatemalteca especializada en fotografía, video y drones. Asesoramos a fotógrafos, creadores de contenido y profesionales para que encuentren el equipo ideal, con productos 100% originales y garantía.</p>"
+    },
+    { "type": "image_picker", "id": "image", "label": "Imagen" },
+    {
+      "type": "select",
+      "id": "image_position",
+      "label": "Posición de la imagen",
+      "options": [
+        { "value": "left", "label": "Izquierda" },
+        { "value": "right", "label": "Derecha" }
+      ],
+      "default": "right"
+    },
+    { "type": "text", "id": "button_label", "label": "Texto del botón" },
+    { "type": "url", "id": "button_link", "label": "Enlace del botón" },
+    {
+      "type": "select",
+      "id": "background",
+      "label": "Fondo",
+      "options": [
+        { "value": "default", "label": "Blanco" },
+        { "value": "surface", "label": "Gris claro" }
+      ],
+      "default": "default"
+    }
+  ],
+  "blocks": [
+    {
+      "type": "stat",
+      "name": "Dato destacado",
+      "settings": [
+        { "type": "text", "id": "value", "label": "Valor", "default": "2" },
+        { "type": "text", "id": "label", "label": "Descripción", "default": "Tiendas físicas" }
+      ]
+    }
+  ],
+  "presets": [
+    {
+      "name": "Sobre nosotros",
+      "blocks": [
+        { "type": "stat", "settings": { "value": "2", "label": "Tiendas físicas" } },
+        { "type": "stat", "settings": { "value": "100%", "label": "Productos originales" } },
+        { "type": "stat", "settings": { "value": "1 año", "label": "De garantía" } }
+      ]
+    }
+  ]
+}
+{% endschema %}

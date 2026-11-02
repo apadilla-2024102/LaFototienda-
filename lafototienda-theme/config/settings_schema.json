@@ -1,0 +1,263 @@
+[
+  {
+    "name": "theme_info",
+    "theme_name": "La Foto Tienda",
+    "theme_version": "1.0.0",
+    "theme_author": "La Foto Tienda",
+    "theme_documentation_url": "https://lafototienda.gt",
+    "theme_support_url": "https://lafototienda.gt"
+  },
+  {
+    "name": "Logo y favicon",
+    "settings": [
+      {
+        "type": "image_picker",
+        "id": "logo",
+        "label": "Logo"
+      },
+      {
+        "type": "range",
+        "id": "logo_width",
+        "label": "Ancho del logo (escritorio)",
+        "min": 80,
+        "max": 300,
+        "step": 10,
+        "unit": "px",
+        "default": 170
+      },
+      {
+        "type": "range",
+        "id": "logo_width_mobile",
+        "label": "Ancho del logo (móvil)",
+        "min": 60,
+        "max": 200,
+        "step": 10,
+        "unit": "px",
+        "default": 120
+      },
+      {
+        "type": "image_picker",
+        "id": "favicon",
+        "label": "Favicon",
+        "info": "Imagen cuadrada de 32 x 32 px."
+      }
+    ]
+  },
+  {
+    "name": "Colores",
+    "settings": [
+      {
+        "type": "color",
+        "id": "color_primary",
+        "label": "Color de marca (botones y acentos)",
+        "default": "#E30613"
+      },
+      {
+        "type": "color",
+        "id": "color_primary_hover",
+        "label": "Color de marca al pasar el cursor",
+        "default": "#B8050F"
+      },
+      {
+        "type": "color",
+        "id": "color_on_primary",
+        "label": "Texto sobre color de marca",
+        "default": "#FFFFFF"
+      },
+      {
+        "type": "color",
+        "id": "color_dark",
+        "label": "Color oscuro (barra superior y footer)",
+        "default": "#111111"
+      },
+      {
+        "type": "color",
+        "id": "color_text",
+        "label": "Texto",
+        "default": "#1A1A1A"
+      },
+      {
+        "type": "color",
+        "id": "color_muted",
+        "label": "Texto secundario",
+        "default": "#5F6368"
+      },
+      {
+        "type": "color",
+        "id": "color_background",
+        "label": "Fondo",
+        "default": "#FFFFFF"
+      },
+      {
+        "type": "color",
+        "id": "color_surface",
+        "label": "Fondo de tarjetas y franjas",
+        "default": "#F5F5F7"
+      },
+      {
+        "type": "color",
+        "id": "color_border",
+        "label": "Bordes",
+        "default": "#E3E3E6"
+      },
+      {
+        "type": "color",
+        "id": "color_sale",
+        "label": "Etiqueta de oferta",
+        "default": "#E30613"
+      }
+    ]
+  },
+  {
+    "name": "Estilo",
+    "settings": [
+      {
+        "type": "range",
+        "id": "border_radius",
+        "label": "Redondeo de esquinas",
+        "min": 0,
+        "max": 24,
+        "step": 2,
+        "unit": "px",
+        "default": 14
+      },
+      {
+        "type": "checkbox",
+        "id": "enable_animations",
+        "label": "Animaciones al hacer scroll",
+        "default": true
+      }
+    ]
+  },
+  {
+    "name": "Tipografía",
+    "settings": [
+      {
+        "type": "font_picker",
+        "id": "type_heading_font",
+        "label": "Títulos",
+        "default": "assistant_n4"
+      },
+      {
+        "type": "font_picker",
+        "id": "type_body_font",
+        "label": "Texto",
+        "default": "assistant_n4"
+      }
+    ]
+  },
+  {
+    "name": "Productos",
+    "settings": [
+      {
+        "type": "select",
+        "id": "card_image_ratio",
+        "label": "Proporción de imagen en tarjetas",
+        "options": [
+          {
+            "value": "square",
+            "label": "Cuadrada"
+          },
+          {
+            "value": "portrait",
+            "label": "Vertical"
+          },
+          {
+            "value": "landscape",
+            "label": "Horizontal"
+          }
+        ],
+        "default": "square"
+      },
+      {
+        "type": "checkbox",
+        "id": "card_show_vendor",
+        "label": "Mostrar marca en tarjetas",
+        "default": true
+      }
+    ]
+  },
+  {
+    "name": "Carrito",
+    "settings": [
+      {
+        "type": "select",
+        "id": "cart_type",
+        "label": "Tipo de carrito",
+        "options": [
+          {
+            "value": "drawer",
+            "label": "Cajón lateral"
+          },
+          {
+            "value": "page",
+            "label": "Página"
+          }
+        ],
+        "default": "drawer"
+      },
+      {
+        "type": "number",
+        "id": "free_shipping_threshold",
+        "label": "Envío gratis desde (Q)",
+        "info": "Muestra una barra de progreso en el carrito. Deja 0 para ocultarla. El envío real se configura en Configuración → Envíos.",
+        "default": 1000
+      }
+    ]
+  },
+  {
+    "name": "Redes sociales",
+    "settings": [
+      {
+        "type": "text",
+        "id": "social_facebook_link",
+        "label": "Facebook",
+        "info": "https://www.facebook.com/..."
+      },
+      {
+        "type": "text",
+        "id": "social_instagram_link",
+        "label": "Instagram",
+        "info": "https://www.instagram.com/..."
+      },
+      {
+        "type": "text",
+        "id": "social_tiktok_link",
+        "label": "TikTok"
+      },
+      {
+        "type": "text",
+        "id": "social_youtube_link",
+        "label": "YouTube"
+      },
+      {
+        "type": "text",
+        "id": "social_whatsapp_number",
+        "label": "Número de WhatsApp",
+        "info": "Solo números con código de país, ej. 50212345678"
+      }
+    ]
+  },
+  {
+    "name": "SEO y datos de la empresa",
+    "settings": [
+      {
+        "type": "image_picker",
+        "id": "share_image",
+        "label": "Imagen para redes sociales",
+        "info": "Se usa cuando la página no tiene imagen propia (1200 x 628 px recomendado)."
+      },
+      {
+        "type": "text",
+        "id": "org_phone",
+        "label": "Teléfono principal",
+        "info": "Se usa en los datos estructurados de la empresa."
+      },
+      {
+        "type": "text",
+        "id": "org_email",
+        "label": "Correo principal"
+      }
+    ]
+  }
+]

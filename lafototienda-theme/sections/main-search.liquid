@@ -1,0 +1,64 @@
+{%- assign escaped_terms = search.terms | escape -%}
+{% render 'breadcrumbs' %}
+<div class="page-width search-page">
+  <h1>
+    {%- if search.performed -%}
+      {{ 'search.results_for' | t: terms: escaped_terms }}
+    {%- else -%}
+      {{ 'search.title' | t }}
+    {%- endif -%}
+  </h1>
+  <div class="search-page__form">{% render 'search-form', id: 'SearchPageInput' %}</div>
+
+  {%- if search.performed -%}
+    {%- paginate search.results by 24 -%}
+      <div class="collection-layout">
+        {%- if search.filters.size > 0 -%}
+          {% render 'facets', results: search, sort_by: search.sort_by, terms: search.terms, url: routes.search_url %}
+        {%- endif -%}
+        <div>
+          <div class="toolbar">
+            {%- if search.filters.size > 0 -%}
+              <button type="button" class="button button--secondary button--small filters-toggle" data-filters-toggle aria-controls="Filters">
+                {% render 'icon', name: 'filter' %}{{ 'collections.filter_and_sort' | t }}
+              </button>
+            {%- endif -%}
+            <p class="toolbar__count">{{ 'search.results_count' | t: count: search.results_count }}</p>
+          </div>
+          {% render 'active-facets', results: search %}
+
+          {%- if search.results_count == 0 -%}
+            <p class="empty-state">{{ 'search.no_results' | t: terms: escaped_terms }}</p>
+          {%- else -%}
+            <ul class="product-grid product-grid--3" role="list">
+              {%- for item in search.results -%}
+                {%- if item.object_type == 'product' -%}
+                  <li>{% render 'product-card', card_product: item, heading_tag: 'h2' %}</li>
+                {%- endif -%}
+              {%- endfor -%}
+            </ul>
+            <ul class="search-results-other" role="list">
+              {%- for item in search.results -%}
+                {%- unless item.object_type == 'product' -%}
+                  <li>
+                    <h2 class="h3"><a href="{{ item.url }}">{{ item.title }}</a></h2>
+                    <p>{{ item.content | strip_html | truncatewords: 30 }}</p>
+                  </li>
+                {%- endunless -%}
+              {%- endfor -%}
+            </ul>
+            {% render 'pagination', paginate: paginate %}
+          {%- endif -%}
+        </div>
+      </div>
+    {%- endpaginate -%}
+  {%- endif -%}
+</div>
+
+{% schema %}
+{
+  "name": "Resultados de búsqueda",
+  "tag": "div",
+  "settings": []
+}
+{% endschema %}

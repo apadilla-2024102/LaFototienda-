@@ -1,0 +1,57 @@
+{%- comment -%}
+  Filtros y orden de Shopify (colección o búsqueda).
+  Parámetros: results (collection o search), sort_by, terms (solo búsqueda), url
+{%- endcomment -%}
+<div class="filters" id="Filters" aria-label="{{ 'collections.filters' | t }}">
+  <form action="{{ url }}" method="get" data-auto-submit id="FacetsForm">
+    {%- if terms != blank -%}
+      <input type="hidden" name="q" value="{{ terms | escape }}">
+      <input type="hidden" name="options[prefix]" value="last">
+    {%- endif -%}
+    {%- if sort_by != blank -%}<input type="hidden" name="sort_by" value="{{ sort_by }}">{%- endif -%}
+
+    <div class="filters__header">
+      <h2 class="h3">{{ 'collections.filters' | t }}</h2>
+      <button type="button" class="header__icon" data-filters-toggle aria-controls="Filters" aria-label="{{ 'general.close' | t }}">{% render 'icon', name: 'close' %}</button>
+    </div>
+
+    {%- for filter in results.filters -%}
+      <details class="filters__group" {% if forloop.index <= 3 or filter.active_values.size > 0 %}open{% endif %}>
+        <summary>{{ filter.label }}{% render 'icon', name: 'chevron-down' %}</summary>
+        {%- case filter.type -%}
+          {%- when 'price_range' -%}
+            <div class="filters__price">
+              <div class="field">
+                <label for="Filter-{{ filter.param_name }}-gte">{{ 'collections.price_from' | t }} ({{ cart.currency.symbol }})</label>
+                <input type="number" id="Filter-{{ filter.param_name }}-gte" name="{{ filter.min_value.param_name }}" min="0" max="{{ filter.range_max | money_without_currency | remove: ',' }}" placeholder="0"
+                  {%- if filter.min_value.value %} value="{{ filter.min_value.value | money_without_currency | remove: ',' }}"{% endif %}>
+              </div>
+              <div class="field">
+                <label for="Filter-{{ filter.param_name }}-lte">{{ 'collections.price_to' | t }} ({{ cart.currency.symbol }})</label>
+                <input type="number" id="Filter-{{ filter.param_name }}-lte" name="{{ filter.max_value.param_name }}" min="0" max="{{ filter.range_max | money_without_currency | remove: ',' }}" placeholder="{{ filter.range_max | money_without_currency | remove: ',' }}"
+                  {%- if filter.max_value.value %} value="{{ filter.max_value.value | money_without_currency | remove: ',' }}"{% endif %}>
+              </div>
+            </div>
+          {%- else -%}
+            <ul class="filters__values" role="list">
+              {%- for value in filter.values -%}
+                <li>
+                  <label class="checkbox{% if value.count == 0 and value.active == false %} is-disabled{% endif %}">
+                    <input type="checkbox" name="{{ value.param_name }}" value="{{ value.value }}"
+                      {% if value.active %}checked{% endif %}
+                      {% if value.count == 0 and value.active == false %}disabled{% endif %}>
+                    <span>{{ value.label }} <span class="count">({{ value.count }})</span></span>
+                  </label>
+                </li>
+              {%- endfor -%}
+            </ul>
+        {%- endcase -%}
+      </details>
+    {%- endfor -%}
+
+    <div class="filters__actions">
+      <button type="submit" class="button button--small">{{ 'collections.apply' | t }}</button>
+      <a href="{{ results.url | default: url }}{% if terms != blank %}?q={{ terms | url_encode }}{% endif %}" class="button button--secondary button--small">{{ 'collections.clear' | t }}</a>
+    </div>
+  </form>
+</div>

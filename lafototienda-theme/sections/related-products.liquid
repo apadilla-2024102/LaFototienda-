@@ -1,0 +1,53 @@
+{%- liquid
+  assign limit = section.settings.products_to_show
+-%}
+{%- capture cards -%}
+  {%- if recommendations.performed? -%}
+    {%- for item in recommendations.products limit: limit -%}
+      <li>{% render 'product-card', card_product: item %}</li>
+    {%- endfor -%}
+  {%- elsif product -%}
+    {%- comment -%} Respaldo sin JS: productos de la misma colección {%- endcomment -%}
+    {%- assign shown = 0 -%}
+    {%- assign source = product.collections.first -%}
+    {%- for item in source.products limit: 12 -%}
+      {%- if item.id != product.id and shown < limit -%}
+        {%- assign shown = shown | plus: 1 -%}
+        <li>{% render 'product-card', card_product: item %}</li>
+      {%- endif -%}
+    {%- endfor -%}
+  {%- endif -%}
+{%- endcapture -%}
+
+<section
+  class="section section--surface"
+  data-recommendations
+  {% if product %}data-url="{{ routes.product_recommendations_url }}?section_id={{ section.id }}&product_id={{ product.id }}&limit={{ limit }}&intent=related"{% endif %}
+  {% if cards == blank %}hidden{% endif %}
+  aria-labelledby="Heading-{{ section.id }}"
+>
+  <div class="page-width">
+    <div class="section-header">
+      <h2 id="Heading-{{ section.id }}">{{ section.settings.heading }}</h2>
+    </div>
+    <ul class="product-grid product-grid--3" role="list" data-recommendations-grid>
+      {{- cards -}}
+    </ul>
+  </div>
+</section>
+
+{% schema %}
+{
+  "name": "Productos relacionados",
+  "tag": "div",
+  "class": "section-related-products",
+  "settings": [
+    { "type": "text", "id": "heading", "label": "Título", "default": "También te puede interesar" },
+    { "type": "range", "id": "products_to_show", "label": "Productos a mostrar", "min": 3, "max": 6, "step": 3, "default": 3 },
+    { "type": "paragraph", "content": "Las recomendaciones las genera Shopify automáticamente. Puedes ajustarlas con la app Search & Discovery." }
+  ],
+  "presets": [
+    { "name": "Productos relacionados" }
+  ]
+}
+{% endschema %}

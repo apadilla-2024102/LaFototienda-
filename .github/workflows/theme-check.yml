@@ -1,0 +1,15 @@
+name: Theme Check
+on: [push, pull_request]
+jobs:
+  theme-check:
+    name: Theme Check
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+      - name: Instalar Shopify CLI
+        run: npm install -g @shopify/cli
+      - name: Theme Check
+        run: shopify theme check --path lafototienda-theme --fail-level error

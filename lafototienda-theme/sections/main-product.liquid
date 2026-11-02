@@ -1,0 +1,342 @@
+{%- liquid
+  assign current_variant = product.selected_or_first_available_variant
+  assign initial_media = current_variant.featured_media | default: product.featured_media
+  assign product_form_id = 'ProductForm-' | append: section.id
+  assign low_stock = section.settings.low_stock_threshold
+-%}
+
+<script src="{{ 'product.js' | asset_url }}" defer></script>
+
+{% render 'breadcrumbs' %}
+
+<section
+  class="page-width product"
+  data-product-section
+  data-section-id="{{ section.id }}"
+  data-product-url="{{ product.url }}"
+>
+  {%- comment -%} ===== Galería ===== {%- endcomment -%}
+  <div class="gallery-wrap">
+    <div class="gallery__badges" data-dynamic="badges">
+      {%- if current_variant.available == false -%}
+        <span class="badge badge--sold-out">{{ 'products.sold_out' | t }}</span>
+      {%- elsif current_variant.compare_at_price > current_variant.price -%}
+        {%- assign discount = current_variant.compare_at_price | minus: current_variant.price | times: 100.0 | divided_by: current_variant.compare_at_price | round -%}
+        <span class="badge badge--sale">{{ 'products.sale' | t }}</span>
+        <span class="badge badge--discount">-{{ discount }}%</span>
+      {%- endif -%}
+    </div>
+
+    <div class="gallery__main" data-gallery-main data-initial-media="{{ initial_media.id }}" aria-label="{{ 'products.gallery' | t }}" tabindex="0">
+      {%- for media in product.media -%}
+        <div class="gallery__slide" data-media-id="{{ media.id }}">
+          {%- case media.media_type -%}
+            {%- when 'image' -%}
+              {%- liquid
+                assign loading = 'lazy'
+                assign priority = 'auto'
+                if media.id == initial_media.id
+                  assign loading = 'eager'
+                  assign priority = 'high'
+                endif
+              -%}
+              {{
+                media
+                | image_url: width: 1600
+                | image_tag:
+                  widths: '400, 600, 800, 1000, 1200, 1600',
+                  sizes: '(min-width: 1320px) 700px, (min-width: 990px) 55vw, 100vw',
+                  loading: loading,
+                  fetchpriority: priority,
+                  alt: media.alt | default: product.title
+              }}
+            {%- when 'external_video' -%}
+              {{ media | external_video_tag: loading: 'lazy' }}
+            {%- when 'video' -%}
+              {{ media | video_tag: controls: true, preload: 'none' }}
+            {%- else -%}
+              {{ media | media_tag }}
+          {%- endcase -%}
+        </div>
+      {%- else -%}
+        <div class="gallery__slide">{{ 'product-1' | placeholder_svg_tag: 'placeholder-svg' }}</div>
+      {%- endfor -%}
+    </div>
+
+    {%- if product.media.size > 1 -%}
+      <ul class="gallery__thumbs" role="list">
+        {%- for media in product.media -%}
+          <li>
+            <button
+              type="button"
+              class="gallery__thumb"
+              data-gallery-thumb="{{ media.id }}"
+              aria-current="{% if media.id == initial_media.id %}true{% else %}false{% endif %}"
+              aria-label="{{ 'products.thumbnail' | t: number: forloop.index }}"
+            >
+              {{ media.preview_image | image_url: width: 160 | image_tag: loading: 'lazy', widths: '80, 160', sizes: '76px', alt: media.alt | default: product.title }}
+            </button>
+          </li>
+        {%- endfor -%}
+      </ul>
+    {%- endif -%}
+  </div>
+
+  {%- comment -%} ===== Información ===== {%- endcomment -%}
+  <div class="product__info">
+    {%- for block in section.blocks -%}
+      {%- case block.type -%}
+        {%- when '@app' -%}
+          {% render block %}
+
+        {%- when 'vendor' -%}
+          {%- if product.vendor != blank -%}
+            <p class="product__vendor" {{ block.shopify_attributes }}>{{ product.vendor }}</p>
+          {%- endif -%}
+
+        {%- when 'title' -%}
+          <h1 class="product__title" {{ block.shopify_attributes }}>{{ product.title }}</h1>
+
+        {%- when 'sku' -%}
+          <p class="product__sku" data-dynamic="sku" {{ block.shopify_attributes }}>
+            {%- if current_variant.sku != blank -%}{{ 'products.sku' | t }}: {{ current_variant.sku }}{%- endif -%}
+          </p>
+
+        {%- when 'price' -%}
+          <div class="product__block" {{ block.shopify_attributes }}>
+            <div data-dynamic="price">
+              {% render 'price', product: product, variant: current_variant, show_savings: true, class: 'price--large' %}
+            </div>
+            {%- if cart.taxes_included -%}
+              <p class="product__tax">{{ 'products.taxes_included' | t }}</p>
+            {%- endif -%}
+          </div>
+
+        {%- when 'inventory' -%}
+          <div class="product__block" data-dynamic="inventory" {{ block.shopify_attributes }}>
+            {%- if current_variant.available == false -%}
+              <p class="product__inventory product__inventory--out">{{ 'products.sold_out' | t }}</p>
+            {%- elsif current_variant.inventory_management == 'shopify' and current_variant.inventory_quantity > 0 and current_variant.inventory_quantity <= low_stock -%}
+              <p class="product__inventory product__inventory--low">{{ 'products.low_stock' | t: count: current_variant.inventory_quantity }}</p>
+            {%- else -%}
+              <p class="product__inventory">{{ 'products.in_stock' | t }}</p>
+            {%- endif -%}
+          </div>
+
+        {%- when 'variant_picker' -%}
+          {%- unless product.has_only_default_variant -%}
+            <div class="product__block variant-picker" data-variant-picker {{ block.shopify_attributes }}>
+              {%- for option in product.options_with_values -%}
+                <fieldset>
+                  <legend>{{ option.name }}: <span data-selected-value>{{ option.selected_value }}</span></legend>
+                  <div class="variant-pills">
+                    {%- for value in option.values -%}
+                      {%- assign input_id = section.id | append: '-' | append: option.position | append: '-' | append: forloop.index -%}
+                      <input
+                        type="radio"
+                        id="{{ input_id }}"
+                        name="{{ section.id }}-option-{{ option.position }}"
+                        value="{{ value | escape }}"
+                        form="{{ product_form_id }}-options"
+                        {% if option.selected_value == value %}checked{% endif %}
+                      >
+                      <label for="{{ input_id }}"{% if value.available == false %} class="is-unavailable"{% endif %}>{{ value }}</label>
+                    {%- endfor -%}
+                  </div>
+                </fieldset>
+              {%- endfor -%}
+              <script type="application/json" data-variants-json>{{ product.variants | json }}</script>
+            </div>
+          {%- endunless -%}
+
+        {%- when 'buy_buttons' -%}
+          <div class="product__block" {{ block.shopify_attributes }}>
+            {%- form 'product', product, id: product_form_id, class: 'buy-buttons', data-product-form: '', novalidate: 'novalidate' -%}
+              <input type="hidden" name="id" value="{{ current_variant.id }}">
+              <div class="buy-buttons__row">
+                <div class="quantity">
+                  <button type="button" data-qty-change="-1" aria-label="{{ 'products.decrease' | t }}">{% render 'icon', name: 'minus' %}</button>
+                  <input type="number" name="quantity" id="Quantity-{{ section.id }}" min="1" value="1" aria-label="{{ 'products.quantity' | t }}">
+                  <button type="button" data-qty-change="1" aria-label="{{ 'products.increase' | t }}">{% render 'icon', name: 'plus' %}</button>
+                </div>
+                <button
+                  type="submit"
+                  name="add"
+                  class="button"
+                  data-add-button
+                  data-dynamic-button="add"
+                  {% unless current_variant.available %}disabled{% endunless %}
+                >
+                  {%- if current_variant.available -%}{{ 'products.add_to_cart' | t }}{%- else -%}{{ 'products.sold_out' | t }}{%- endif -%}
+                </button>
+              </div>
+              {%- if block.settings.show_buy_now -%}
+                <button
+                  type="submit"
+                  name="return_to"
+                  value="/checkout"
+                  class="button button--secondary button--full"
+                  data-buy-now
+                  data-dynamic-button="buy"
+                  {% unless current_variant.available %}disabled{% endunless %}
+                >
+                  {{- 'products.buy_now' | t -}}
+                </button>
+              {%- endif -%}
+              <p class="buy-buttons__error" data-form-error role="alert"></p>
+            {%- endform -%}
+          </div>
+
+        {%- when 'perks' -%}
+          <ul class="product-perks" role="list" {{ block.shopify_attributes }}>
+            {%- if block.settings.perk_1 != blank -%}<li>{% render 'icon', name: 'truck' %}{{ block.settings.perk_1 }}</li>{%- endif -%}
+            {%- if block.settings.perk_2 != blank -%}<li>{% render 'icon', name: 'shield' %}{{ block.settings.perk_2 }}</li>{%- endif -%}
+            {%- if block.settings.perk_3 != blank -%}<li>{% render 'icon', name: 'store' %}{{ block.settings.perk_3 }}</li>{%- endif -%}
+            {%- if block.settings.perk_4 != blank -%}<li>{% render 'icon', name: 'lock' %}{{ block.settings.perk_4 }}</li>{%- endif -%}
+          </ul>
+
+        {%- when 'text' -%}
+          <div class="product__block rte" {{ block.shopify_attributes }}>{{ block.settings.text }}</div>
+
+        {%- when 'tabs' -%}
+          {%- liquid
+            assign specs_field = product.metafields.custom.especificaciones
+            assign warranty_field = product.metafields.custom.garantia
+          -%}
+          {%- capture specs_html -%}
+            {%- if specs_field != blank -%}
+              {%- if specs_field.type == 'rich_text_field' -%}{{ specs_field | metafield_tag }}{%- else -%}{{ specs_field.value | newline_to_br }}{%- endif -%}
+            {%- elsif block.settings.specs != blank -%}
+              {{ block.settings.specs }}
+            {%- endif -%}
+          {%- endcapture -%}
+          {%- capture warranty_html -%}
+            {%- if warranty_field != blank -%}
+              {%- if warranty_field.type == 'rich_text_field' -%}{{ warranty_field | metafield_tag }}{%- else -%}{{ warranty_field.value | newline_to_br }}{%- endif -%}
+            {%- else -%}
+              {{ block.settings.warranty }}
+            {%- endif -%}
+          {%- endcapture -%}
+          <div class="tabs" {{ block.shopify_attributes }}>
+            <div class="tabs__list" role="tablist" aria-label="{{ product.title | escape }}">
+              <button type="button" class="tabs__tab" role="tab" id="Tab-desc-{{ section.id }}" aria-controls="Panel-desc-{{ section.id }}" aria-selected="true">{{ 'products.description' | t }}</button>
+              {%- if specs_html != blank -%}
+                <button type="button" class="tabs__tab" role="tab" id="Tab-specs-{{ section.id }}" aria-controls="Panel-specs-{{ section.id }}" aria-selected="false" tabindex="-1">{{ block.settings.specs_label }}</button>
+              {%- endif -%}
+              {%- if warranty_html != blank -%}
+                <button type="button" class="tabs__tab" role="tab" id="Tab-warranty-{{ section.id }}" aria-controls="Panel-warranty-{{ section.id }}" aria-selected="false" tabindex="-1">{{ 'products.warranty' | t }}</button>
+              {%- endif -%}
+            </div>
+            <div class="tabs__panel rte" role="tabpanel" id="Panel-desc-{{ section.id }}" aria-labelledby="Tab-desc-{{ section.id }}" tabindex="0">
+              {{ product.description }}
+            </div>
+            {%- if specs_html != blank -%}
+              <div class="tabs__panel rte" role="tabpanel" id="Panel-specs-{{ section.id }}" aria-labelledby="Tab-specs-{{ section.id }}" tabindex="0" hidden>
+                {{ specs_html }}
+              </div>
+            {%- endif -%}
+            {%- if warranty_html != blank -%}
+              <div class="tabs__panel rte" role="tabpanel" id="Panel-warranty-{{ section.id }}" aria-labelledby="Tab-warranty-{{ section.id }}" tabindex="0" hidden>
+                {{ warranty_html }}
+              </div>
+            {%- endif -%}
+          </div>
+      {%- endcase -%}
+    {%- endfor -%}
+  </div>
+</section>
+
+{%- comment -%} ===== Datos estructurados Product ===== {%- endcomment -%}
+{%- liquid
+  assign seo_variant = current_variant
+-%}
+<script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@type": "Product",
+    "name": {{ product.title | json }},
+    "url": {{ shop.url | append: product.url | json }},
+    {%- if product.featured_media -%}
+      "image": [
+        {%- for media in product.media limit: 5 -%}
+          {{ media.preview_image | image_url: width: 1200 | prepend: 'https:' | json }}{%- unless forloop.last -%},{%- endunless -%}
+        {%- endfor -%}
+      ],
+    {%- endif -%}
+    "description": {{ product.description | strip_html | strip_newlines | truncate: 5000 | json }},
+    {%- if seo_variant.sku != blank -%}"sku": {{ seo_variant.sku | json }},{%- endif -%}
+    {%- if seo_variant.barcode != blank -%}"gtin": {{ seo_variant.barcode | json }},{%- endif -%}
+    "brand": { "@type": "Brand", "name": {{ product.vendor | json }} },
+    "offers": [
+      {%- for variant in product.variants -%}
+        {
+          "@type": "Offer",
+          {%- if variant.sku != blank -%}"sku": {{ variant.sku | json }},{%- endif -%}
+          "name": {{ variant.title | json }},
+          "url": {{ shop.url | append: variant.url | json }},
+          "price": {{ variant.price | divided_by: 100.0 | json }},
+          "priceCurrency": {{ cart.currency.iso_code | json }},
+          "availability": "https://schema.org/{% if variant.available %}InStock{% else %}OutOfStock{% endif %}",
+          "itemCondition": "https://schema.org/NewCondition",
+          "seller": { "@id": {{ shop.url | append: '/#organization' | json }} }
+        }{%- unless forloop.last -%},{%- endunless -%}
+      {%- endfor -%}
+    ]
+  }
+</script>
+
+{% schema %}
+{
+  "name": "Información del producto",
+  "tag": "div",
+  "class": "section-main-product",
+  "settings": [
+    { "type": "range", "id": "low_stock_threshold", "label": "Avisar “últimas unidades” con", "min": 1, "max": 10, "step": 1, "default": 3, "info": "Requiere que Shopify controle el inventario." }
+  ],
+  "blocks": [
+    { "type": "@app" },
+    { "type": "vendor", "name": "Marca", "limit": 1, "settings": [] },
+    { "type": "title", "name": "Título", "limit": 1, "settings": [] },
+    { "type": "sku", "name": "SKU", "limit": 1, "settings": [] },
+    { "type": "price", "name": "Precio", "limit": 1, "settings": [] },
+    { "type": "inventory", "name": "Disponibilidad", "limit": 1, "settings": [] },
+    { "type": "variant_picker", "name": "Selector de variantes", "limit": 1, "settings": [] },
+    {
+      "type": "buy_buttons",
+      "name": "Botones de compra",
+      "limit": 1,
+      "settings": [
+        { "type": "checkbox", "id": "show_buy_now", "label": "Mostrar botón “Comprar ahora”", "default": true, "info": "Lleva directo al checkout de Shopify." }
+      ]
+    },
+    {
+      "type": "perks",
+      "name": "Beneficios",
+      "limit": 1,
+      "settings": [
+        { "type": "text", "id": "perk_1", "label": "Beneficio 1 (envío)", "default": "Envío gratis en compras desde Q1,000" },
+        { "type": "text", "id": "perk_2", "label": "Beneficio 2 (garantía)", "default": "1 año de garantía · Producto original" },
+        { "type": "text", "id": "perk_3", "label": "Beneficio 3 (tienda)", "default": "Recoge en Zona 10 o en Xela" },
+        { "type": "text", "id": "perk_4", "label": "Beneficio 4 (pago)", "default": "Pago 100% seguro con tarjeta" }
+      ]
+    },
+    {
+      "type": "tabs",
+      "name": "Pestañas",
+      "limit": 1,
+      "settings": [
+        { "type": "text", "id": "specs_label", "label": "Título de especificaciones", "default": "Especificaciones" },
+        { "type": "richtext", "id": "specs", "label": "Especificaciones (texto general)", "info": "Para especificaciones por producto crea el metacampo custom.especificaciones o conecta una fuente dinámica." },
+        { "type": "richtext", "id": "warranty", "label": "Garantía", "default": "<p>Todos nuestros productos son 100% originales e incluyen <strong>1 año de garantía</strong> contra defectos de fábrica. Para hacer válida la garantía presenta tu factura en cualquiera de nuestras tiendas.</p>", "info": "Puedes sobrescribirla por producto con el metacampo custom.garantia." }
+      ]
+    },
+    {
+      "type": "text",
+      "name": "Texto",
+      "settings": [
+        { "type": "richtext", "id": "text", "label": "Texto", "default": "<p>¿Tienes dudas? Escríbenos y te asesoramos.</p>" }
+      ]
+    }
+  ]
+}
+{% endschema %}

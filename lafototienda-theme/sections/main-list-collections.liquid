@@ -1,0 +1,39 @@
+{% render 'breadcrumbs' %}
+<div class="page-width main-page">
+  <h1>{{ section.settings.heading | default: page_title }}</h1>
+  {%- paginate collections by 24 -%}
+    <ul class="collection-list" role="list">
+      {%- for item in collections -%}
+        <li data-reveal>
+          <a href="{{ item.url }}" class="category-card">
+            <div class="category-card__media">
+              {%- if item.featured_image -%}
+                {{ item.featured_image | image_url: width: 800 | image_tag: widths: '300, 450, 600, 800', sizes: '(min-width: 990px) 25vw, 50vw', loading: 'lazy', alt: item.featured_image.alt | default: item.title }}
+              {%- else -%}
+                {{ 'collection-1' | placeholder_svg_tag: 'placeholder-svg' }}
+              {%- endif -%}
+            </div>
+            <div class="category-card__body">
+              <h2 class="category-card__title">
+                {{ item.title }}
+                <span class="category-card__count">{{ 'collections.products_count' | t: count: item.products_count }}</span>
+              </h2>
+              <span class="category-card__arrow">{% render 'icon', name: 'chevron-right' %}</span>
+            </div>
+          </a>
+        </li>
+      {%- endfor -%}
+    </ul>
+    {% render 'pagination', paginate: paginate %}
+  {%- endpaginate -%}
+</div>
+
+{% schema %}
+{
+  "name": "Lista de colecciones",
+  "tag": "div",
+  "settings": [
+    { "type": "text", "id": "heading", "label": "Título", "default": "Categorías" }
+  ]
+}
+{% endschema %}

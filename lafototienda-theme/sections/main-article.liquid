@@ -1,0 +1,93 @@
+{% render 'breadcrumbs' %}
+<article class="page-width page-width--narrow article">
+  <header class="article__header">
+    <h1>{{ article.title }}</h1>
+    <p class="article__meta">
+      {{ article.published_at | time_tag: format: 'date' }}
+      {%- if section.settings.show_author %} · {{ 'blog.by_author' | t: author: article.author }}{% endif %}
+    </p>
+  </header>
+
+  {%- if article.image -%}
+    <div class="article__image">
+      {{ article.image | image_url: width: 1600 | image_tag: widths: '600, 900, 1200, 1600', sizes: '(min-width: 900px) 860px, 100vw', loading: 'eager', fetchpriority: 'high', alt: article.image.alt | default: article.title }}
+    </div>
+  {%- endif -%}
+
+  <div class="article__content rte">{{ article.content }}</div>
+
+  {%- if article.tags.size > 0 -%}
+    <ul class="article__tags" role="list" aria-label="{{ 'blog.tags' | t }}">
+      {%- for tag in article.tags -%}
+        <li><a href="{{ blog.url }}/tagged/{{ tag | handle }}">{{ tag }}</a></li>
+      {%- endfor -%}
+    </ul>
+  {%- endif -%}
+
+  <a href="{{ blog.url }}" class="link">{% render 'icon', name: 'chevron-left' %}{{ 'blog.back_to_blog' | t: title: blog.title }}</a>
+
+  {%- if blog.comments_enabled? -%}
+    <section class="comments" aria-labelledby="CommentsHeading">
+      <h2 id="CommentsHeading" class="h3">{{ 'blog.comments' | t: count: article.comments_count }}</h2>
+      {%- paginate article.comments by 20 -%}
+        {%- for comment in article.comments -%}
+          <div class="comment">
+            <div class="rte">{{ comment.content }}</div>
+            <p class="comment__meta">{{ comment.author }} · {{ comment.created_at | time_tag: format: 'date' }}</p>
+          </div>
+        {%- endfor -%}
+        {% render 'pagination', paginate: paginate %}
+      {%- endpaginate -%}
+
+      <h3>{{ 'blog.leave_comment' | t }}</h3>
+      {%- form 'new_comment', article -%}
+        {%- if form.posted_successfully? -%}
+          <div class="form-message form-message--success">
+            {%- if blog.moderated? -%}{{ 'blog.comment_moderated' | t }}{%- else -%}{{ 'blog.comment_posted' | t }}{%- endif -%}
+          </div>
+        {%- elsif form.errors -%}
+          <div class="form-message form-message--error">{{ form.errors | default_errors }}</div>
+        {%- endif -%}
+        <div class="form-grid form-grid--2">
+          <div class="field">
+            <label for="CommentAuthor">{{ 'contact.name' | t }}</label>
+            <input type="text" id="CommentAuthor" name="comment[author]" value="{{ form.author }}" autocomplete="name" required>
+          </div>
+          <div class="field">
+            <label for="CommentEmail">{{ 'contact.email' | t }}</label>
+            <input type="email" id="CommentEmail" name="comment[email]" value="{{ form.email }}" autocomplete="email" required>
+          </div>
+          <div class="field field--full">
+            <label for="CommentBody">{{ 'contact.message' | t }}</label>
+            <textarea id="CommentBody" name="comment[body]" required>{{ form.body }}</textarea>
+          </div>
+        </div>
+        <button type="submit" class="button">{{ 'blog.post_comment' | t }}</button>
+      {%- endform -%}
+    </section>
+  {%- endif -%}
+</article>
+
+<script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@type": "BlogPosting",
+    "headline": {{ article.title | json }},
+    "datePublished": {{ article.published_at | date: '%Y-%m-%dT%H:%M:%S%z' | json }},
+    "dateModified": {{ article.updated_at | date: '%Y-%m-%dT%H:%M:%S%z' | json }},
+    "author": { "@type": "Person", "name": {{ article.author | json }} },
+    "publisher": { "@id": {{ shop.url | append: '/#organization' | json }} },
+    {%- if article.image -%}"image": {{ article.image | image_url: width: 1200 | prepend: 'https:' | json }},{%- endif -%}
+    "mainEntityOfPage": {{ shop.url | append: article.url | json }}
+  }
+</script>
+
+{% schema %}
+{
+  "name": "Artículo",
+  "tag": "div",
+  "settings": [
+    { "type": "checkbox", "id": "show_author", "label": "Mostrar autor", "default": true }
+  ]
+}
+{% endschema %}

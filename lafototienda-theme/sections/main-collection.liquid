@@ -1,0 +1,94 @@
+{% render 'breadcrumbs' %}
+
+<div class="page-width collection-hero">
+  <div class="collection-hero__inner{% if section.settings.show_image and collection.image %} collection-hero__inner--image{% endif %}">
+    <div>
+      <h1>{{ collection.title }}</h1>
+      {%- if section.settings.show_description and collection.description != blank -%}
+        <div class="collection-hero__description rte">{{ collection.description }}</div>
+      {%- endif -%}
+    </div>
+    {%- if section.settings.show_image and collection.image -%}
+      <div class="collection-hero__image">
+        {{ collection.image | image_url: width: 1400 | image_tag: widths: '500, 800, 1100, 1400', sizes: '(min-width: 990px) 50vw, 100vw', loading: 'eager', alt: collection.image.alt | default: collection.title }}
+      </div>
+    {%- endif -%}
+  </div>
+</div>
+
+{%- paginate collection.products by section.settings.products_per_page -%}
+  <div class="page-width collection-layout">
+    {%- if section.settings.enable_filtering and collection.filters.size > 0 -%}
+      {% render 'facets', results: collection, sort_by: collection.sort_by, url: collection.url %}
+    {%- endif -%}
+
+    <div>
+      <div class="toolbar">
+        {%- if section.settings.enable_filtering and collection.filters.size > 0 -%}
+          <button type="button" class="button button--secondary button--small filters-toggle" data-filters-toggle aria-controls="Filters">
+            {% render 'icon', name: 'filter' %}{{ 'collections.filter_and_sort' | t }}
+          </button>
+        {%- endif -%}
+        <p class="toolbar__count">{{ 'collections.products_count' | t: count: collection.products_count }}</p>
+        {%- if section.settings.enable_sorting -%}
+          <form class="toolbar__sort" action="{{ collection.url }}" method="get" data-auto-submit>
+            {%- for filter in collection.filters -%}
+              {%- for value in filter.active_values -%}
+                <input type="hidden" name="{{ value.param_name }}" value="{{ value.value }}">
+              {%- endfor -%}
+              {%- if filter.type == 'price_range' -%}
+                {%- if filter.min_value.value -%}<input type="hidden" name="{{ filter.min_value.param_name }}" value="{{ filter.min_value.value | money_without_currency | remove: ',' }}">{%- endif -%}
+                {%- if filter.max_value.value -%}<input type="hidden" name="{{ filter.max_value.param_name }}" value="{{ filter.max_value.value | money_without_currency | remove: ',' }}">{%- endif -%}
+              {%- endif -%}
+            {%- endfor -%}
+            <label for="SortBy">{{ 'collections.sort_by' | t }}</label>
+            <select name="sort_by" id="SortBy">
+              {%- assign sort_by = collection.sort_by | default: collection.default_sort_by -%}
+              {%- for option in collection.sort_options -%}
+                <option value="{{ option.value | escape }}"{% if option.value == sort_by %} selected{% endif %}>{{ option.name }}</option>
+              {%- endfor -%}
+            </select>
+            <noscript><button type="submit" class="button button--small">{{ 'collections.apply' | t }}</button></noscript>
+          </form>
+        {%- endif -%}
+      </div>
+
+      {% render 'active-facets', results: collection %}
+
+      {%- if collection.products.size > 0 -%}
+        <ul class="product-grid product-grid--3" role="list">
+          {%- for item in collection.products -%}
+            {%- liquid
+              assign lazy = true
+              if forloop.index <= 3
+                assign lazy = false
+              endif
+            -%}
+            <li>{% render 'product-card', card_product: item, lazy: lazy, heading_tag: 'h2' %}</li>
+          {%- endfor -%}
+        </ul>
+        {% render 'pagination', paginate: paginate %}
+      {%- else -%}
+        <div class="empty-state">
+          <p>{{ 'collections.no_results' | t }}</p>
+          <a href="{{ collection.url }}" class="button button--secondary">{{ 'collections.clear_all' | t }}</a>
+        </div>
+      {%- endif -%}
+    </div>
+  </div>
+{%- endpaginate -%}
+
+{% schema %}
+{
+  "name": "Colección",
+  "tag": "div",
+  "class": "section-main-collection",
+  "settings": [
+    { "type": "range", "id": "products_per_page", "label": "Productos por página", "min": 6, "max": 48, "step": 3, "default": 24 },
+    { "type": "checkbox", "id": "show_description", "label": "Mostrar descripción", "default": true },
+    { "type": "checkbox", "id": "show_image", "label": "Mostrar imagen de la colección", "default": false },
+    { "type": "checkbox", "id": "enable_filtering", "label": "Activar filtros", "default": true, "info": "Configura los filtros con la app Search & Discovery de Shopify." },
+    { "type": "checkbox", "id": "enable_sorting", "label": "Activar orden", "default": true }
+  ]
+}
+{% endschema %}
