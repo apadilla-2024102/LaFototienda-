@@ -58,7 +58,7 @@ function makeImage(id, text, alt) {
     width: 800,
     height: 800,
     aspect_ratio: 1,
-    src: (w = 800) => `https://placehold.co/${w}x${w}/f5f5f7/1a1a1a/png?text=${encodeURIComponent(text)}`,
+    src: (w = 800) => `//placehold.co/${w}x${w}/f5f5f7/1a1a1a/png?text=${encodeURIComponent(text)}`,
     toString() { return this.src(800); },
   };
 }
