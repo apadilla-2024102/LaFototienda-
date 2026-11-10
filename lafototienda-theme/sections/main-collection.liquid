@@ -10,7 +10,8 @@
     </div>
     {%- if section.settings.show_image and collection.image -%}
       <div class="collection-hero__image">
-        {{ collection.image | image_url: width: 1400 | image_tag: widths: '500, 800, 1100, 1400', sizes: '(min-width: 990px) 50vw, 100vw', loading: 'eager', alt: collection.image.alt | default: collection.title }}
+        {%- assign img_alt = collection.image.alt | default: collection.title -%}
+        {{ collection.image | image_url: width: 1400 | image_tag: widths: '500, 800, 1100, 1400', sizes: '(min-width: 990px) 50vw, 100vw', loading: 'eager', alt: img_alt }}
       </div>
     {%- endif -%}
   </div>

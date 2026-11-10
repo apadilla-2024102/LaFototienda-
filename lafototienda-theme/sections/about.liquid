@@ -25,10 +25,11 @@
       </div>
       <div class="about__media" data-reveal>
         {%- if section.settings.image != blank -%}
+          {%- assign img_alt = section.settings.image.alt | default: section.settings.heading -%}
           {{
             section.settings.image
             | image_url: width: 1400
-            | image_tag: widths: '450, 700, 1000, 1400', sizes: '(min-width: 990px) 50vw, 100vw', loading: 'lazy', alt: section.settings.image.alt | default: section.settings.heading
+            | image_tag: widths: '450, 700, 1000, 1400', sizes: '(min-width: 990px) 50vw, 100vw', loading: 'lazy', alt: img_alt
           }}
         {%- else -%}
           {{ 'lifestyle-1' | placeholder_svg_tag: 'placeholder-svg' }}

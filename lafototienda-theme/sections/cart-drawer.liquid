@@ -15,7 +15,8 @@
               <li class="cart-item">
                 <a href="{{ item.url }}" class="cart-item__media" tabindex="-1">
                   {%- if item.image -%}
-                    {{ item.image | image_url: width: 200 | image_tag: loading: 'lazy', widths: '100, 200', sizes: '84px', alt: item.image.alt | default: item.product.title }}
+                    {%- assign img_alt = item.image.alt | default: item.product.title -%}
+                    {{ item.image | image_url: width: 200 | image_tag: loading: 'lazy', widths: '100, 200', sizes: '84px', alt: img_alt }}
                   {%- else -%}
                     {{ 'product-1' | placeholder_svg_tag: 'placeholder-svg' }}
                   {%- endif -%}

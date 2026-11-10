@@ -8,10 +8,11 @@
         <li class="brands__item" {{ block.shopify_attributes }}>
           {%- capture brand_inner -%}
             {%- if block.settings.image != blank -%}
+              {%- assign img_alt = block.settings.name | default: block.settings.image.alt -%}
               {{
                 block.settings.image
                 | image_url: height: 120
-                | image_tag: loading: 'lazy', alt: block.settings.name | default: block.settings.image.alt, height: 40, widths: '120, 240'
+                | image_tag: loading: 'lazy', alt: img_alt, height: 40, widths: '120, 240'
               }}
             {%- else -%}
               <span class="brands__name">{{ block.settings.name }}</span>

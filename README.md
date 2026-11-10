@@ -154,6 +154,7 @@ En **Tienda online → Temas → Personalizar**:
 1. Barra superior con horarios de Design Center Zona 10 y Plaza Siete Xela.
 2. Encabezado: logo, menú de Shopify, buscador, cuenta, carrito con contador y menú hamburguesa en móvil.
 3. Banner / slider con varias diapositivas (“Mundo DJI sin límites”).
+   - **Carrusel con lente:** debajo del banner, las fotos de la colección **Cámaras** pasan por una lente de vidrio que dobla las imágenes en los extremos (Three.js, WebGL). Se arrastra con el mouse o el dedo, con la rueda horizontal del trackpad o con las flechas ← → (Inicio vuelve al principio). Al hacer clic en una foto se abre la cámara. Si el navegador no tiene WebGL, se muestra una tira de fotos normal. En el editor puedes cambiar la colección o usar tus propias imágenes con bloques “Imagen”.
 4. Franja de logos de marcas (bloques con imagen o texto).
 5. 4 insignias de confianza.
 6. Mosaico de categorías (bloques que eligen colección).
@@ -255,6 +256,7 @@ Los íconos de pago del footer y del carrito aparecen solos según los métodos 
 Vercel no puede ejecutar un tema de Shopify, así que el repositorio incluye un generador (`preview/build.mjs`) que lee los archivos del tema y crea páginas HTML con **productos de ejemplo** (`preview/sample-data.mjs`). Cada vez que subes cambios a GitHub, Vercel vuelve a generar la página y puedes ver cómo quedó el diseño en https://lafototienda.vercel.app.
 
 - Es solo una vitrina: el carrito, el checkout, los formularios y el inventario funcionan únicamente en Shopify.
+- Las fotos de ejemplo están en `preview/images/` y son de Wikimedia Commons con licencia libre; los créditos se ven en `/creditos` y están en `preview/images/credits.json`. Algunas muestran un modelo cercano (por ejemplo, el DJI Neo original en lugar del Neo 2). La Canon EOS R6 Mark II, la Nikon Z6III, la Fujifilm X-T5 y la DJI Osmo Pocket 3 solo existen en la vista previa, con precios de ejemplo.
 - La configuración está en `vercel.json`. No hace falta cambiar nada en el panel de Vercel.
 - Para generarla en tu computadora:
 

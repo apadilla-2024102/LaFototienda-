@@ -1,0 +1,113 @@
+{%- comment -%}
+  Carrusel con lente de vidrio (efecto de refracción con Three.js).
+  Las imágenes salen de los bloques "Imagen" si existen; si no, de la
+  imagen principal de los productos de la colección elegida.
+  Todo el estilo está limitado a .lens-carousel (assets/lens-carousel.css).
+{%- endcomment -%}
+{{ 'lens-carousel.css' | asset_url | stylesheet_tag }}
+
+{%- liquid
+  assign source = section.settings.collection
+  assign limit = section.settings.limit
+-%}
+
+{%- capture covers_json -%}
+  [
+  {%- if section.blocks.size > 0 -%}
+    {%- for block in section.blocks -%}
+      {%- if block.settings.image != blank -%}
+        {%- capture src -%}{{ block.settings.image | image_url: width: 1200 }}{%- endcapture -%}
+        {"src": {{ src | json }}, "width": {{ block.settings.image.width | default: 1200 }}, "height": {{ block.settings.image.height | default: 795 }}, "alt": {{ block.settings.alt | default: block.settings.image.alt | json }}, "url": {{ block.settings.link | default: '' | json }}},
+      {%- endif -%}
+    {%- endfor -%}
+  {%- elsif source != blank -%}
+    {%- for item in source.products limit: limit -%}
+      {%- assign media = item.featured_media -%}
+      {%- if media -%}
+        {%- capture src -%}{{ media | image_url: width: 1200 }}{%- endcapture -%}
+        {"src": {{ src | json }}, "width": {{ media.preview_image.width | default: 1200 }}, "height": {{ media.preview_image.height | default: 795 }}, "alt": {{ media.alt | default: item.title | json }}, "url": {{ item.url | json }}},
+      {%- endif -%}
+    {%- endfor -%}
+  {%- endif -%}
+  null]
+{%- endcapture -%}
+
+<section
+  class="lens-carousel"
+  data-lens-carousel
+  data-three-src="{{ 'three.module.min.js' | asset_url }}"
+  aria-label="{{ section.settings.label | escape }}"
+>
+  <h2 class="lens-carousel__title">{{ section.settings.label }}</h2>
+
+  <div class="lens-carousel__stage">
+    {%- comment -%} Respaldo sin WebGL: tira horizontal estática (también sirve para buscadores) {%- endcomment -%}
+    <ul class="lens-carousel__strip" role="list" data-lens-fallback>
+      {%- if section.blocks.size > 0 -%}
+        {%- for block in section.blocks -%}
+          {%- if block.settings.image != blank -%}
+            <li {{ block.shopify_attributes }}>
+              {%- if block.settings.link != blank -%}<a href="{{ block.settings.link }}">{%- endif -%}
+              {%- assign img_alt = block.settings.alt | default: block.settings.image.alt -%}
+              {{ block.settings.image | image_url: width: 900 | image_tag: loading: 'lazy', widths: '480, 700, 900', sizes: '(min-width: 750px) 470px, 64vw', alt: img_alt }}
+              {%- if block.settings.link != blank -%}</a>{%- endif -%}
+            </li>
+          {%- endif -%}
+        {%- endfor -%}
+      {%- elsif source != blank -%}
+        {%- for item in source.products limit: limit -%}
+          {%- if item.featured_media -%}
+            <li>
+              <a href="{{ item.url }}">
+                {%- assign img_alt = item.featured_media.alt | default: item.title -%}
+                {{ item.featured_media | image_url: width: 900 | image_tag: loading: 'lazy', widths: '480, 700, 900', sizes: '(min-width: 750px) 470px, 64vw', alt: img_alt }}
+                <span class="lens-carousel__name">{{ item.title }}</span>
+              </a>
+            </li>
+          {%- endif -%}
+        {%- endfor -%}
+      {%- else -%}
+        {%- for i in (1..6) -%}
+          <li>{{ 'product-' | append: i | placeholder_svg_tag: 'lens-carousel__placeholder' }}</li>
+        {%- endfor -%}
+      {%- endif -%}
+    </ul>
+  </div>
+
+  {%- if section.settings.hint != blank -%}
+    <p class="lens-carousel__hint">{{ section.settings.hint }}</p>
+  {%- endif -%}
+
+  <script type="application/json" data-lens-covers>{{ covers_json | strip }}</script>
+</section>
+
+<script src="{{ 'lens-carousel.js' | asset_url }}" type="module"></script>
+
+{% schema %}
+{
+  "name": "Carrusel con lente",
+  "tag": "div",
+  "class": "section-lens-carousel",
+  "max_blocks": 24,
+  "settings": [
+    { "type": "collection", "id": "collection", "label": "Colección", "info": "Se usa la imagen principal de cada producto. Si agregas bloques de imagen, se usan esos en su lugar." },
+    { "type": "range", "id": "limit", "label": "Productos a mostrar", "min": 4, "max": 24, "step": 2, "default": 12 },
+    { "type": "text", "id": "label", "label": "Título (solo lectores de pantalla)", "default": "Nuestras cámaras" },
+    { "type": "text", "id": "hint", "label": "Texto de ayuda", "default": "Desliza o arrastra para explorar" }
+  ],
+  "blocks": [
+    {
+      "type": "image",
+      "name": "Imagen",
+      "settings": [
+        { "type": "image_picker", "id": "image", "label": "Imagen", "info": "Horizontal, proporción 3:2 recomendada." },
+        { "type": "text", "id": "alt", "label": "Texto alternativo" },
+        { "type": "url", "id": "link", "label": "Enlace" }
+      ]
+    }
+  ],
+  "presets": [
+    { "name": "Carrusel con lente" }
+  ]
+}
+{% endschema %}

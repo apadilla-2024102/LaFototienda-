@@ -40,6 +40,7 @@
                   assign priority = 'high'
                 endif
               -%}
+              {%- assign img_alt = media.alt | default: product.title -%}
               {{
                 media
                 | image_url: width: 1600
@@ -48,7 +49,7 @@
                   sizes: '(min-width: 1320px) 700px, (min-width: 990px) 55vw, 100vw',
                   loading: loading,
                   fetchpriority: priority,
-                  alt: media.alt | default: product.title
+                  alt: img_alt
               }}
             {%- when 'external_video' -%}
               {{ media | external_video_tag: loading: 'lazy' }}
@@ -74,7 +75,8 @@
               aria-current="{% if media.id == initial_media.id %}true{% else %}false{% endif %}"
               aria-label="{{ 'products.thumbnail' | t: number: forloop.index }}"
             >
-              {{ media.preview_image | image_url: width: 160 | image_tag: loading: 'lazy', widths: '80, 160', sizes: '76px', alt: media.alt | default: product.title }}
+              {%- assign img_alt = media.alt | default: product.title -%}
+              {{ media.preview_image | image_url: width: 160 | image_tag: loading: 'lazy', widths: '80, 160', sizes: '76px', alt: img_alt }}
             </button>
           </li>
         {%- endfor -%}

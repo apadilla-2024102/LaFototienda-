@@ -7,34 +7,55 @@ const SITE_URL = process.env.VERCEL_PROJECT_PRODUCTION_URL
 
 const PRODUCTS = [
   {
-    handle: 'sony-fe-70-200mm-f2-8-gm-oss', title: 'Sony FE 70-200mm f/2.8 GM OSS', vendor: 'Sony', type: 'Lentes',
+    handle: 'sony-fe-70-200mm-f2-8-gm-oss', image: 'sony-fe-70-200mm-gm.jpg', title: 'Sony FE 70-200mm f/2.8 GM OSS', vendor: 'Sony', type: 'Lentes',
     tags: ['ofertas', 'lentes', 'sony'], price: 1699900, compare: 1879900, qty: 10,
     body: '<p>Teleobjetivo profesional G Master con apertura constante f/2.8 y estabilización óptica OSS. Ideal para deportes, eventos, retratos y fauna.</p><ul><li>Montura Sony E (full frame)</li><li>Apertura f/2.8 constante</li><li>Estabilización óptica OSS</li><li>Sellado contra polvo y humedad</li></ul>',
   },
   {
-    handle: 'sony-e-35mm-f1-8-oss', title: 'Sony E 35mm f/1.8 OSS', vendor: 'Sony', type: 'Lentes',
+    handle: 'sony-e-35mm-f1-8-oss', image: 'sony-e-35mm-f1-8.jpg', title: 'Sony E 35mm f/1.8 OSS', vendor: 'Sony', type: 'Lentes',
     tags: ['ofertas', 'lentes', 'sony'], price: 329900, compare: 459900, qty: 10,
     body: '<p>Lente fijo luminoso para cámaras Sony APS-C. Perfecto para retrato, fotografía de calle y video con fondo desenfocado.</p><ul><li>Montura Sony E (APS-C)</li><li>Apertura f/1.8</li><li>Estabilización óptica OSS</li></ul>',
   },
   {
-    handle: 'dji-osmo-360-adventure-combo', title: 'DJI Osmo 360 Adventure Combo', vendor: 'DJI', type: 'Cámaras',
+    handle: 'dji-osmo-360-adventure-combo', image: 'dji-osmo-360-muestra.jpg', title: 'DJI Osmo 360 Adventure Combo', vendor: 'DJI', type: 'Cámaras',
     tags: ['ofertas', 'camaras', 'dji'], price: 539900, compare: 0, qty: 0,
     body: '<p>Cámara 360° de DJI para deportes, viajes y contenido inmersivo. El combo Adventure incluye accesorios para aventuras.</p>',
   },
   {
-    handle: 'sony-alpha-a7-v', title: 'Sony Alpha a7 V', vendor: 'Sony', type: 'Cámaras',
+    handle: 'sony-alpha-a7-v', image: 'sony-alpha-a7-v.jpg', title: 'Sony Alpha a7 V', vendor: 'Sony', type: 'Cámaras',
     tags: ['nuevos', 'camaras', 'sony'], price: 2099900, compare: 2449900, qty: 5,
     body: '<p>Cámara mirrorless full frame de la línea Alpha 7 de Sony, para fotografía y video profesional con enfoque automático de alto rendimiento.</p>',
   },
   {
-    handle: 'dji-mic-mini', title: 'DJI Mic Mini', vendor: 'DJI', type: 'Accesorios',
+    handle: 'dji-mic-mini', image: 'dji-mic-mini.jpg', title: 'DJI Mic Mini', vendor: 'DJI', type: 'Accesorios',
     tags: ['nuevos', 'accesorios', 'dji'], price: 149900, compare: 0, qty: 15,
     body: '<p>Micrófono inalámbrico ultraligero de DJI para creadores de contenido. Conecta con cámaras, celulares y computadoras.</p>',
   },
   {
-    handle: 'dji-neo-2', title: 'DJI Neo 2', vendor: 'DJI', type: 'Drones',
+    handle: 'dji-neo-2', image: 'dji-neo.jpg', title: 'DJI Neo 2', vendor: 'DJI', type: 'Drones',
     tags: ['nuevos', 'drones', 'dji'], price: 299900, compare: 0, qty: 8,
     body: '<p>Dron compacto y ligero de DJI para grabar desde el aire con seguimiento inteligente. Ideal para vlogs, viajes y principiantes.</p>',
+  },
+  // Cámaras adicionales solo para la vista previa (precios de ejemplo)
+  {
+    handle: 'canon-eos-r6-mark-ii', image: 'canon-eos-r6-mark-ii.jpg', title: 'Canon EOS R6 Mark II', vendor: 'Canon', type: 'Cámaras',
+    tags: ['camaras', 'canon'], price: 1999900, compare: 0, qty: 4,
+    body: '<p>Cámara mirrorless full frame de Canon para foto y video, con enfoque automático rápido y estabilización en el cuerpo.</p>',
+  },
+  {
+    handle: 'nikon-z6iii', image: 'nikon-z6iii.jpg', title: 'Nikon Z6III', vendor: 'Nikon', type: 'Cámaras',
+    tags: ['camaras', 'nikon'], price: 2199900, compare: 0, qty: 3,
+    body: '<p>Cámara mirrorless full frame de Nikon, pensada para creadores híbridos de foto y video.</p>',
+  },
+  {
+    handle: 'fujifilm-x-t5', image: 'fujifilm-x-t5.jpg', title: 'Fujifilm X-T5', vendor: 'Fujifilm', type: 'Cámaras',
+    tags: ['camaras', 'fujifilm', 'ofertas'], price: 1499900, compare: 1649900, qty: 6,
+    body: '<p>Cámara APS-C de Fujifilm con controles clásicos y simulaciones de película.</p>',
+  },
+  {
+    handle: 'dji-osmo-pocket-3', image: 'dji-osmo-pocket-3.jpg', title: 'DJI Osmo Pocket 3', vendor: 'DJI', type: 'Cámaras',
+    tags: ['camaras', 'dji', 'nuevos'], price: 429900, compare: 0, qty: 12,
+    body: '<p>Cámara de bolsillo con gimbal de 3 ejes, ideal para vlogs y viajes.</p>',
   },
 ];
 
@@ -51,23 +72,46 @@ const COLLECTIONS = [
   { handle: 'all', title: 'Todos los productos', match: () => true },
 ];
 
-function makeImage(id, text, alt) {
+import fs from 'node:fs';
+import path from 'node:path';
+import { fileURLToPath } from 'node:url';
+
+const IMAGES_DIR = path.join(path.dirname(fileURLToPath(import.meta.url)), 'images');
+const credits = JSON.parse(fs.readFileSync(path.join(IMAGES_DIR, 'credits.json'), 'utf8'));
+
+// Lee ancho y alto de un JPEG sin dependencias
+function jpegSize(file) {
+  const buf = fs.readFileSync(file);
+  let i = 2;
+  while (i < buf.length) {
+    const marker = buf[i + 1];
+    const len = buf.readUInt16BE(i + 2);
+    if (marker >= 0xc0 && marker <= 0xc3) return { height: buf.readUInt16BE(i + 5), width: buf.readUInt16BE(i + 7) };
+    i += 2 + len;
+  }
+  return { width: 1200, height: 800 };
+}
+
+function makeImage(id, file, alt) {
+  const { width, height } = jpegSize(path.join(IMAGES_DIR, file));
   return {
     id,
     alt,
-    width: 800,
-    height: 800,
-    aspect_ratio: 1,
-    src: (w = 800) => `//placehold.co/${w}x${w}/f5f5f7/1a1a1a/png?text=${encodeURIComponent(text)}`,
-    toString() { return this.src(800); },
+    width,
+    height,
+    aspect_ratio: width / height,
+    src: () => `/preview-images/${file}`,
+    toString() { return this.src(); },
   };
 }
 
+export { credits };
+
 export function buildSampleData() {
   let nextId = 1000;
-  const products = PRODUCTS.map((p) => {
+  const products = PRODUCTS.map((p, index) => {
     const id = nextId++;
-    const image = makeImage(nextId++, p.title, p.title);
+    const image = makeImage(nextId++, p.image, p.title);
     const media = { ...image, media_type: 'image', preview_image: image };
     const variant = {
       id: nextId++,
@@ -75,7 +119,7 @@ export function buildSampleData() {
       price: p.price,
       compare_at_price: p.compare || null,
       available: p.qty > 0,
-      sku: `LFT-${String(id - 999).padStart(3, '0')}`,
+      sku: `LFT-${String(index + 1).padStart(3, '0')}`,
       barcode: '',
       url: `/products/${p.handle}`,
       featured_media: null,
@@ -110,7 +154,11 @@ export function buildSampleData() {
   });
 
   const collectionList = COLLECTIONS.map((c, i) => {
-    const items = products.filter((p) => c.match(PRODUCTS.find((x) => x.handle === p.handle)));
+    const isSample = (p) => PRODUCTS.find((x) => x.handle === p.handle).image.includes('muestra');
+    // Las imágenes temporales van al final para que no encabecen las colecciones
+    const items = products
+      .filter((p) => c.match(PRODUCTS.find((x) => x.handle === p.handle)))
+      .sort((a, b) => Number(isSample(a)) - Number(isSample(b)));
     return {
       id: 500 + i,
       handle: c.handle,

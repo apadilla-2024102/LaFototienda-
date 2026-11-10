@@ -352,10 +352,20 @@
         "show_store_select": true,
         "store_names": "Design Center Zona 10\nPlaza Siete Xela"
       }
+    },
+    "lens_carousel": {
+      "type": "lens-carousel",
+      "settings": {
+        "collection": "camaras",
+        "limit": 12,
+        "label": "Nuestras cámaras",
+        "hint": "Desliza o arrastra para explorar"
+      }
     }
   },
   "order": [
     "hero",
+    "lens_carousel",
     "brands",
     "trust",
     "categories",
