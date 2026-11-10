@@ -19,6 +19,7 @@
 <article class="card card--{{ settings.card_image_ratio }}" data-reveal>
   <div class="card__media">
     {%- if media -%}
+      {%- assign img_alt = media.alt | default: card_product.title -%}
       {{
         media.preview_image
         | image_url: width: 900
@@ -26,7 +27,7 @@
           widths: '240, 360, 480, 600, 750, 900',
           sizes: img_sizes,
           loading: loading,
-          alt: media.alt | default: card_product.title,
+          alt: img_alt,
           class: 'card__image'
       }}
     {%- else -%}

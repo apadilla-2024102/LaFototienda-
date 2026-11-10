@@ -28,10 +28,11 @@
           <a href="{{ cat_url }}" class="category-card">
             <div class="category-card__media">
               {%- if cat_image -%}
+                {%- assign img_alt = cat_image.alt | default: cat_title -%}
                 {{
                   cat_image
                   | image_url: width: 1200
-                  | image_tag: widths: '300, 450, 600, 800, 1200', sizes: img_sizes, loading: 'lazy', alt: cat_image.alt | default: cat_title
+                  | image_tag: widths: '300, 450, 600, 800, 1200', sizes: img_sizes, loading: 'lazy', alt: img_alt
                 }}
               {%- else -%}
                 {%- assign placeholder_index = forloop.index | modulo: 4 | plus: 1 -%}

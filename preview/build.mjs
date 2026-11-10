@@ -11,7 +11,7 @@ import fs from 'node:fs';
 import path from 'node:path';
 import { fileURLToPath } from 'node:url';
 import { Liquid } from 'liquidjs';
-import { buildSampleData } from './sample-data.mjs';
+import { buildSampleData, credits } from './sample-data.mjs';
 
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
 const ROOT = path.resolve(__dirname, '..');
@@ -328,7 +328,7 @@ const PREVIEW_EXTRAS = `
 </style>`;
 
 const PREVIEW_SCRIPT = `
-<div class="preview-badge">Vista previa · productos de ejemplo</div>
+<div class="preview-badge">Vista previa · productos de ejemplo · <a href="/creditos" style="color:#fff">créditos de fotos</a></div>
 <div class="preview-toast" id="PreviewToast" role="status"></div>
 <script>
   (function () {
@@ -370,10 +370,24 @@ function themeSettings(data) {
   return resolveSettings(defs, current, data);
 }
 
+function writeCreditsPage() {
+  const rows = credits.map((c) => `<li><strong>${c.title}</strong> — ${c.author}. Licencia ${c.license}. <a href="${c.source}">Ver en Wikimedia Commons</a></li>`).join('\n');
+  const html = `<!doctype html><html lang="es"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><meta name="robots" content="noindex"><title>Créditos de fotos | Vista previa</title>
+<style>body{font:16px/1.6 system-ui,sans-serif;max-width:760px;margin:40px auto;padding:0 16px;color:#1a1a1a}a{color:#E30613}li{margin-bottom:10px}</style></head>
+<body><h1>Créditos de fotos</h1><p>Las fotos de esta vista previa son de <a href="https://commons.wikimedia.org">Wikimedia Commons</a> y se usan según su licencia. Se redujeron de tamaño y se recortan en el carrusel. Algunas muestran un modelo cercano al producto de ejemplo.</p>
+<ul>${rows}</ul><p>La imagen del DJI Osmo 360 es una ilustración temporal.</p><p><a href="/">Volver a la vista previa</a></p></body></html>`;
+  fs.writeFileSync(path.join(DIST, 'creditos.html'), html);
+}
+
 async function main() {
   fs.rmSync(DIST, { recursive: true, force: true });
   fs.mkdirSync(DIST, { recursive: true });
   fs.cpSync(path.join(THEME, 'assets'), path.join(DIST, 'assets'), { recursive: true });
+  fs.cpSync(path.join(__dirname, 'images'), path.join(DIST, 'preview-images'), {
+    recursive: true,
+    filter: (src) => !src.endsWith('.json'),
+  });
+  writeCreditsPage();
 
   const data = buildSampleData();
   Object.assign(globals, {

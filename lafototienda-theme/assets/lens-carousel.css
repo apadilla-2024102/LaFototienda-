@@ -1,0 +1,62 @@
+/* Carrusel con lente de vidrio — estilos limitados a .lens-carousel */
+.lens-carousel {
+  --lc-bg: #121212;
+  --lc-gap: 10px;
+  --lc-card: 64vw;
+  position: relative;
+  background: var(--lc-bg);
+  color: rgba(255, 255, 255, .55);
+  padding: 0 0 22px;
+  overflow: hidden;
+}
+@media (min-width: 750px) {
+  .lens-carousel { --lc-gap: 14px; --lc-card: min(20.5vw, 470px); }
+}
+.lens-carousel__title {
+  position: absolute !important; width: 1px; height: 1px; overflow: hidden;
+  clip: rect(0 0 0 0); white-space: nowrap; margin: -1px; padding: 0; border: 0;
+}
+.lens-carousel__stage {
+  position: relative;
+  height: 92vw;
+  max-height: 760px;
+}
+@media (min-width: 750px) {
+  .lens-carousel__stage { height: clamp(380px, 40vw, 680px); }
+}
+.lens-carousel__canvas {
+  position: absolute; inset: 0; width: 100%; height: 100%;
+  display: block; outline: none; cursor: grab; touch-action: pan-y;
+}
+.lens-carousel__canvas:active { cursor: grabbing; }
+.lens-carousel__canvas:focus-visible { box-shadow: inset 0 0 0 2px rgba(255, 255, 255, .5); }
+
+/* Respaldo sin WebGL: tira horizontal con scroll nativo */
+.lens-carousel__strip {
+  position: absolute; inset: 0;
+  display: flex; align-items: center; gap: var(--lc-gap);
+  margin: 0; padding: 0 var(--lc-gap); list-style: none;
+  overflow-x: auto; scroll-snap-type: x mandatory; scrollbar-width: none;
+}
+.lens-carousel__strip::-webkit-scrollbar { display: none; }
+.lens-carousel__strip li { flex: 0 0 var(--lc-card); scroll-snap-align: center; }
+.lens-carousel__strip a { position: relative; display: block; color: #fff; }
+.lens-carousel__strip img,
+.lens-carousel__placeholder {
+  display: block; width: 100%; height: auto; aspect-ratio: 1.509;
+  object-fit: cover; border-radius: 3px; background: #1e1e1e;
+}
+.lens-carousel__placeholder { fill: #3a3a3a; }
+.lens-carousel__name {
+  position: absolute; left: 10px; bottom: 8px; font-size: 13px; font-weight: 600;
+  text-shadow: 0 1px 6px rgba(0, 0, 0, .6);
+}
+/* Con WebGL activo la tira queda solo para lectores de pantalla */
+.lens-carousel.is-webgl .lens-carousel__strip {
+  clip-path: inset(50%); width: 1px; height: 1px; overflow: hidden; white-space: nowrap;
+}
+
+.lens-carousel__hint {
+  margin: 0; text-align: center; font-size: 12px; letter-spacing: .08em;
+  color: rgba(255, 255, 255, .45);
+}
