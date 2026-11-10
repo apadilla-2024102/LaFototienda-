@@ -18,7 +18,7 @@
 </div>
 
 {%- paginate collection.products by section.settings.products_per_page -%}
-  <div class="page-width collection-layout">
+  <div class="page-width collection-layout{% if section.settings.enable_filtering and collection.filters.size > 0 %} collection-layout--filters{% endif %}">
     {%- if section.settings.enable_filtering and collection.filters.size > 0 -%}
       {% render 'facets', results: collection, sort_by: collection.sort_by, url: collection.url %}
     {%- endif -%}

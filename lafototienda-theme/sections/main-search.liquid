@@ -12,7 +12,7 @@
 
   {%- if search.performed -%}
     {%- paginate search.results by 24 -%}
-      <div class="collection-layout">
+      <div class="collection-layout{% if search.filters.size > 0 %} collection-layout--filters{% endif %}">
         {%- if search.filters.size > 0 -%}
           {% render 'facets', results: search, sort_by: search.sort_by, terms: search.terms, url: routes.search_url %}
         {%- endif -%}
