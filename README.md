@@ -247,3 +247,23 @@ Los íconos de pago del footer y del carrito aparecen solos según los métodos 
 - Textos de la interfaz: `lafototienda-theme/locales/es.default.json`.
 - Colores, tipografía y espaciados: `lafototienda-theme/assets/base.css` (variables en `snippets/css-variables.liquid`).
 - Cada push a GitHub ejecuta **Theme Check** (`.github/workflows/theme-check.yml`).
+
+---
+
+## 7. Vista previa en Vercel (solo para ver el diseño)
+
+Vercel no puede ejecutar un tema de Shopify, así que el repositorio incluye un generador (`preview/build.mjs`) que lee los archivos del tema y crea páginas HTML con **productos de ejemplo** (`preview/sample-data.mjs`). Cada vez que subes cambios a GitHub, Vercel vuelve a generar la página y puedes ver cómo quedó el diseño en https://lafototienda.vercel.app.
+
+- Es solo una vitrina: el carrito, el checkout, los formularios y el inventario funcionan únicamente en Shopify.
+- La configuración está en `vercel.json`. No hace falta cambiar nada en el panel de Vercel.
+- Para generarla en tu computadora:
+
+```bash
+npm install
+```
+
+```bash
+npm run preview:build
+```
+
+Las páginas quedan en `preview/dist/`.

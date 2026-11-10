@@ -1,0 +1,12 @@
+{
+  "name": "lafototienda-preview",
+  "private": true,
+  "description": "Vista previa estática del tema de Shopify para Vercel",
+  "type": "module",
+  "scripts": {
+    "preview:build": "node preview/build.mjs"
+  },
+  "dependencies": {
+    "liquidjs": "^10.21.0"
+  }
+}

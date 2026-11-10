@@ -144,7 +144,7 @@ p { margin: 0 0 1em; }
 /* ---------- Header ---------- */
 .site-header { position: relative; z-index: 50; background: rgba(255,255,255,.92); backdrop-filter: saturate(180%) blur(12px); -webkit-backdrop-filter: saturate(180%) blur(12px); border-bottom: 1px solid var(--color-border); transition: box-shadow .3s; }
 .site-header--sticky { position: relative; }
-.section-header:has(.site-header--sticky) { position: sticky; top: 0; z-index: 50; }
+.section-site-header:has(.site-header--sticky) { position: sticky; top: 0; z-index: 50; }
 .site-header.is-scrolled { box-shadow: 0 6px 24px rgba(0,0,0,.06); }
 .header { display: grid; grid-template-columns: auto 1fr auto; align-items: center; gap: .75rem; min-height: 64px; }
 .header__logo { margin: 0; font-size: 1.35rem; line-height: 1; letter-spacing: -0.03em; }
@@ -611,3 +611,6 @@ p { margin: 0 0 1em; }
 .gift-card__qr { display: flex; justify-content: center; margin: 1rem 0; }
 .main-password-logo img, .account-box > img { width: 180px; margin: 0 auto 1.5rem; }
 .address-form .button + .button { margin-left: .5rem; }
+/* Evita que una imagen o un texto largo ensanche las columnas de la cuadrícula */
+.product-grid > li, .categories__grid > li, .stores__grid > li, .article-grid > li, .collection-list > li, .collection-layout > *, .product > * { min-width: 0; }
+.card__media img, .gallery__slide img { max-width: 100%; }
